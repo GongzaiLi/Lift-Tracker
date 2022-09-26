@@ -12,8 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,6 +21,7 @@ import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.core.Constants.Companion.EMPTY_URI
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.navigation.Screen
+import com.seng440.jeh128.seng440assignment2.presentation.components.getIconFromDrawable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -232,7 +231,6 @@ fun ExercisesTopBar(
                     Icon(
                         painterResource(id = getIconFromDrawable("ic_baseline_settings_24")),
                         contentDescription = null,
-                        tint = Color.White
                     )
                 }
 
@@ -241,17 +239,4 @@ fun ExercisesTopBar(
 
         },
     )
-}
-
-
-@Composable
-fun getIconFromDrawable(iconName: String): Int {
-    val context = LocalContext.current
-    val drawableId = remember(iconName) {
-
-        context.resources.getIdentifier(
-            iconName, "drawable", context.packageName
-        )
-    }
-    return drawableId
 }
