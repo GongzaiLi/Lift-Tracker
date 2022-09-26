@@ -10,12 +10,14 @@ import androidx.navigation.navArgument
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.MainScreen
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.ViewExerciseScreen
+import com.seng440.jeh128.seng440assignment2.navigation.Screen.PreferenceScreen
 import com.seng440.jeh128.seng440assignment2.presentation.ExercisesListScreen
+import com.seng440.jeh128.seng440assignment2.presentation.PreferenceScreen
 import com.seng440.jeh128.seng440assignment2.presentation.ViewExerciseScreen
 import com.seng440.jeh128.seng440assignment2.ui.theme.Seng440Assignment2Theme
 
 @Composable
-fun NavGraph (
+fun NavGraph(
     navController: NavHostController,
 ) {
     val viewModel: ExercisesViewModel = hiltViewModel()
@@ -31,7 +33,8 @@ fun NavGraph (
                     viewModel = viewModel,
                     navigateToViewExerciseScreen = { exerciseId ->
                         navController.navigate("${ViewExerciseScreen.route}/${exerciseId}")
-                    }
+                    },
+                    navController = navController
                 )
             }
             composable(
@@ -51,6 +54,13 @@ fun NavGraph (
                     }
                 )
             }
+            composable(
+                route = PreferenceScreen.route
+            ) {
+                PreferenceScreen(viewModel= viewModel, navController = navController)
+            }
+
         }
     }
+
 }

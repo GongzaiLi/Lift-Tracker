@@ -17,10 +17,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.core.Constants.Companion.EMPTY_URI
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
+import com.seng440.jeh128.seng440assignment2.navigation.Screen
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -29,47 +31,37 @@ import java.time.format.DateTimeFormatter
 fun ExercisesListScreen(
     viewModel: ExercisesViewModel,
     navigateToViewExerciseScreen: (exerciseId: Int) -> Unit,
+    navController: NavController
 ) {
     LaunchedEffect(Unit) {
         viewModel.getExercises()
     }
-    Scaffold(
-        topBar = {
-            ExercisesTopBar(
-                viewModel = viewModel
-            )
-        },
-        content = { padding ->
-            ExercisesContent(
-                padding = padding,
-                exercises = viewModel.exercises,
-                navigateToViewExerciseScreen = navigateToViewExerciseScreen,
-                viewModel = viewModel
-            )
-            AddExerciseAlertDialog(
-                openDialog = viewModel.openDialog,
-                closeDialog = {
-                    viewModel.closeDialog()
-                },
-                addExercise = { exercise ->
-                    viewModel.addExercise(exercise)
-                }
-            )
-        },
-        floatingActionButton = {
-            AddExerciseFloatingActionButton(
-                openDialog = {
-                    viewModel.openDialog()
-                }
-            )
-        }
-    )
+    Scaffold(topBar = {
+        ExercisesTopBar(viewModel = viewModel,
+            navigateGoPreference = { navController.navigate(Screen.PreferenceScreen.route) })
+    }, content = { padding ->
+        ExercisesContent(
+            padding = padding,
+            exercises = viewModel.exercises,
+            navigateToViewExerciseScreen = navigateToViewExerciseScreen,
+            viewModel = viewModel
+        )
+        AddExerciseAlertDialog(openDialog = viewModel.openDialog, closeDialog = {
+            viewModel.closeDialog()
+        }, addExercise = { exercise ->
+            viewModel.addExercise(exercise)
+        })
+    }, floatingActionButton = {
+        AddExerciseFloatingActionButton(openDialog = {
+            viewModel.openDialog()
+        })
+    })
 }
 
 
 @Composable
 fun AddExerciseFloatingActionButton(
-    openDialog: () -> Unit
+    openDialog: () -> Unit,
 ) {
     ExtendedFloatingActionButton(
         onClick = openDialog,
@@ -90,60 +82,45 @@ fun AddExerciseFloatingActionButton(
 
 @Composable
 fun AddExerciseAlertDialog(
-    openDialog: Boolean,
-    closeDialog: () -> Unit,
-    addExercise: (exercise: Exercise) -> Unit
+    openDialog: Boolean, closeDialog: () -> Unit, addExercise: (exercise: Exercise) -> Unit
 ) {
     if (openDialog) {
         var name by rememberSaveable { mutableStateOf("") }
         val focusRequester = FocusRequester()
 
-        AlertDialog(
-            onDismissRequest = closeDialog,
-            title = {
-                Text(
-                    text = stringResource(id = R.string.add_exercise),
-                    style = MaterialTheme.typography.h2
+        AlertDialog(onDismissRequest = closeDialog, title = {
+            Text(
+                text = stringResource(id = R.string.add_exercise),
+                style = MaterialTheme.typography.h2
+            )
+        }, text = {
+            Column {
+                TextField(value = name, onValueChange = { name = it }, placeholder = {
+                    Text(
+                        text = stringResource(id = R.string.exercise_name)
+                    )
+                }, modifier = Modifier.focusRequester(focusRequester)
                 )
-            },
-            text = {
-                Column {
-                    TextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        placeholder = {
-                            Text(
-                                text = stringResource(id = R.string.exercise_name)
-                            )
-                        },
-                        modifier = Modifier.focusRequester(focusRequester)
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        closeDialog()
-                        val exercise =
-                            Exercise(0, name, 0.0, "", LocalDateTime.now(), "", EMPTY_URI)
-                        addExercise(exercise)
-                    }
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.add)
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = closeDialog
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.dismiss)
-                    )
-                }
             }
-        )
+        }, confirmButton = {
+            TextButton(onClick = {
+                closeDialog()
+                val exercise = Exercise(0, name, 0.0, "", LocalDateTime.now(), "", EMPTY_URI)
+                addExercise(exercise)
+            }) {
+                Text(
+                    text = stringResource(id = R.string.add)
+                )
+            }
+        }, dismissButton = {
+            TextButton(
+                onClick = closeDialog
+            ) {
+                Text(
+                    text = stringResource(id = R.string.dismiss)
+                )
+            }
+        })
     }
 }
 
@@ -180,21 +157,13 @@ fun ExerciseCard(
     viewModel: ExercisesViewModel
 ) {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy")
-    Card(
-        shape = MaterialTheme.shapes.small,
-        modifier = Modifier
-            .padding(
-                start = 8.dp,
-                end = 8.dp,
-                top = 4.dp,
-                bottom = 4.dp
-            )
-            .fillMaxWidth(),
-        elevation = 100.dp,
-        onClick = {
-            navigateToViewExerciseScreen(exercise.id)
-        }
-    ) {
+    Card(shape = MaterialTheme.shapes.small, modifier = Modifier
+        .padding(
+            start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp
+        )
+        .fillMaxWidth(), elevation = 100.dp, onClick = {
+        navigateToViewExerciseScreen(exercise.id)
+    }) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -204,10 +173,9 @@ fun ExerciseCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(
-                        fraction = 0.90f
-                    )
+                modifier = Modifier.fillMaxWidth(
+                    fraction = 0.90f
+                )
             ) {
                 Text(
                     text = exercise.name,
@@ -246,7 +214,7 @@ fun ExerciseCard(
 
 @Composable
 fun ExercisesTopBar(
-    viewModel: ExercisesViewModel,
+    viewModel: ExercisesViewModel, navigateGoPreference: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -259,9 +227,8 @@ fun ExercisesTopBar(
                     text = stringResource(id = R.string.app_name)
                 )
                 IconButton(
-                    onClick = {
-                        /*todo*/
-                    }) {
+                    onClick = navigateGoPreference
+                ) {
                     Icon(
                         painterResource(id = getIconFromDrawable("ic_baseline_settings_24")),
                         contentDescription = null,
@@ -283,9 +250,7 @@ fun getIconFromDrawable(iconName: String): Int {
     val drawableId = remember(iconName) {
 
         context.resources.getIdentifier(
-            iconName,
-            "drawable",
-            context.packageName
+            iconName, "drawable", context.packageName
         )
     }
     return drawableId
