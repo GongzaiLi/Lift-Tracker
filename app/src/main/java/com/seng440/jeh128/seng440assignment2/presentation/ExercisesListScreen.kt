@@ -12,6 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.seng440.jeh128.seng440assignment2.R
@@ -121,7 +124,8 @@ fun AddExerciseAlertDialog(
                 TextButton(
                     onClick = {
                         closeDialog()
-                        val exercise = Exercise(0, name, 0.0, "", LocalDateTime.now(), "", EMPTY_URI)
+                        val exercise =
+                            Exercise(0, name, 0.0, "", LocalDateTime.now(), "", EMPTY_URI)
                         addExercise(exercise)
                     }
                 ) {
@@ -204,7 +208,7 @@ fun ExerciseCard(
                     .fillMaxWidth(
                         fraction = 0.90f
                     )
-            ){
+            ) {
                 Text(
                     text = exercise.name,
                     color = MaterialTheme.colors.onSurface,
@@ -244,11 +248,45 @@ fun ExerciseCard(
 fun ExercisesTopBar(
     viewModel: ExercisesViewModel,
 ) {
-    TopAppBar (
+    TopAppBar(
         title = {
-            Text(
-                text = stringResource(id = R.string.app_name)
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(id = R.string.app_name)
+                )
+                IconButton(
+                    onClick = {
+                        /*todo*/
+                    }) {
+                    Icon(
+                        painterResource(id = getIconFromDrawable("ic_baseline_settings_24")),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+
+            }
+
+
         },
     )
+}
+
+
+@Composable
+fun getIconFromDrawable(iconName: String): Int {
+    val context = LocalContext.current
+    val drawableId = remember(iconName) {
+
+        context.resources.getIdentifier(
+            iconName,
+            "drawable",
+            context.packageName
+        )
+    }
+    return drawableId
 }
