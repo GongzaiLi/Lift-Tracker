@@ -10,8 +10,7 @@ import androidx.navigation.navArgument
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.MainScreen
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.ViewExerciseScreen
-import com.seng440.jeh128.seng440assignment2.presentation.ExercisesListScreen
-import com.seng440.jeh128.seng440assignment2.presentation.ViewExerciseScreen
+import com.seng440.jeh128.seng440assignment2.presentation.*
 import com.seng440.jeh128.seng440assignment2.ui.theme.Seng440Assignment2Theme
 
 @Composable
@@ -46,6 +45,30 @@ fun NavGraph (
                 ViewExerciseScreen(
                     viewModel = viewModel,
                     exerciseId = exerciseId,
+                    navigateToLogPBScreen = { navController.navigate(Screen.LogPBScreen.route) },
+                    navigateToRecordPBScreen = { navController.navigate(Screen.RecordPBScreen.route) },
+                    navigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.LogPBScreen.route
+            ) {
+                LogPBScreen(
+                    viewModel = viewModel,
+                    navigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.RecordPBScreen.route
+            ) {
+                RecordPBScreen(
+                    viewModel = viewModel,
                     navigateBack = {
                         navController.popBackStack()
                     }
