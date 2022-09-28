@@ -121,7 +121,7 @@ fun AddExerciseAlertDialog(
                 TextButton(
                     onClick = {
                         closeDialog()
-                        val exercise = Exercise(0, name, 0.0, "", LocalDateTime.now(), "", EMPTY_URI)
+                        val exercise = Exercise(0, name, "")
                         addExercise(exercise)
                     }
                 ) {
@@ -188,7 +188,7 @@ fun ExerciseCard(
             .fillMaxWidth(),
         elevation = 100.dp,
         onClick = {
-            navigateToViewExerciseScreen(exercise.id)
+            navigateToViewExerciseScreen(exercise.exerciseId)
         }
     ) {
         Row(
@@ -209,30 +209,6 @@ fun ExerciseCard(
                     text = exercise.name,
                     color = MaterialTheme.colors.onSurface,
                     style = MaterialTheme.typography.h1
-                )
-                Spacer(
-                    modifier = Modifier.height(8.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.pb_weight, exercise.pbWeight.toString()),
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.h3
-                )
-                Spacer(
-                    modifier = Modifier.height(2.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.pb_date, exercise.pbDate.format(formatter)),
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.h3
-                )
-                Spacer(
-                    modifier = Modifier.height(2.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.pb_location, exercise.pbLocation),
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.h3
                 )
             }
         }
