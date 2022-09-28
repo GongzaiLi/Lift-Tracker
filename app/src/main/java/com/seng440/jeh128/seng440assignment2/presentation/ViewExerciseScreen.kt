@@ -1,6 +1,9 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
+import android.net.Uri
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -17,6 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
+import com.seng440.jeh128.seng440assignment2.domain.model.ExerciseWithPersonalBests
+import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -27,6 +33,7 @@ fun ViewExerciseScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.getExercise(exerciseId)
+        viewModel.getExerciseWithPersonalBests(exerciseId)
     }
     Scaffold(
         topBar = {
@@ -39,6 +46,8 @@ fun ViewExerciseScreen(
             ViewExerciseContent(
                 padding,
                 exercise = viewModel.exercise,
+                exerciseWithPersonalBests = viewModel.exerciseWithPersonalBests,
+                viewModel = viewModel
             )
         },
     )
@@ -72,19 +81,78 @@ fun ViewExerciseTopBar(
 fun ViewExerciseContent(
     padding: PaddingValues,
     exercise: Exercise,
+    exerciseWithPersonalBests: ExerciseWithPersonalBests,
+    viewModel: ExercisesViewModel
 ) {
-    Column(
-        modifier = Modifier
-            .padding(30.dp, 10.dp)
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Top
-    ) {
+    Column() {
+        Button(
+            onClick = {
+                val personalBest = PersonalBest(0, exercise.exerciseId, 10.0, "Thames", LocalDateTime.now(), Uri.EMPTY)
+                viewModel.addPersonalBest(personalBest)
+            }
+        ) {
+            Text(text = "Add")
+        }
         Text(
             text = exercise.name,
             textAlign = TextAlign.Left,
             style = MaterialTheme.typography.h1,
         )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            items(
+                items = exerciseWithPersonalBests.personalBests
+            ) { personalBest ->
+                PersonalBestCard(
+                    personalBest = personalBest
+                )
+            }
+        }
+    }
+
+
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PersonalBestCard(
+    personalBest: PersonalBest,
+) {
+    Card(
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier
+            .padding(
+                start = 8.dp,
+                end = 8.dp,
+                top = 4.dp,
+                bottom = 4.dp
+            )
+            .fillMaxWidth(),
+        elevation = 100.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    all = 12.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(
+                        fraction = 0.90f
+                    )
+            ){
+                Text(
+                    text = personalBest.pbLocation,
+                    color = MaterialTheme.colors.onSurface,
+                    style = MaterialTheme.typography.h1
+                )
+            }
+        }
     }
 }

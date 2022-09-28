@@ -87,37 +87,49 @@ fun AddExerciseAlertDialog(
         var name by rememberSaveable { mutableStateOf("") }
         val focusRequester = FocusRequester()
 
-        AlertDialog(onDismissRequest = closeDialog, title = {
-            Text(
-                text = stringResource(id = R.string.add_exercise),
-                style = MaterialTheme.typography.h2
-            )
-        }, text = {
-            Column {
-                TextField(value = name, onValueChange = { name = it }, placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.exercise_name)
+        AlertDialog(
+            onDismissRequest = closeDialog,
+            title = {
+                Text(
+                    text = stringResource(id = R.string.add_exercise),
+                    style = MaterialTheme.typography.h2
+                )
+            },
+            text = {
+                Column {
+                    TextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        placeholder = {
+                            Text(
+                                text = stringResource(id = R.string.exercise_name)
+                            )
+                        },
+                        modifier = Modifier.focusRequester(focusRequester)
                     )
-                }, modifier = Modifier.focusRequester(focusRequester)
-                )
-            }
-        }, confirmButton = {
-            TextButton(onClick = {
-                closeDialog()
-                val exercise = Exercise(0, name, 0.0, "", LocalDateTime.now(), "", EMPTY_URI)
-                addExercise(exercise)
-            }) {
-                Text(
-                    text = stringResource(id = R.string.add)
-                )
-            }
-        }, dismissButton = {
-            TextButton(
-                onClick = closeDialog
-            ) {
-                Text(
-                    text = stringResource(id = R.string.dismiss)
-                )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        closeDialog()
+                        val exercise = Exercise(0, name, "")
+                        addExercise(exercise)
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.add)
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = closeDialog
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.dismiss)
+                    )
+                }
             }
         })
     }
@@ -156,13 +168,21 @@ fun ExerciseCard(
     viewModel: ExercisesViewModel
 ) {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy")
-    Card(shape = MaterialTheme.shapes.small, modifier = Modifier
-        .padding(
-            start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp
-        )
-        .fillMaxWidth(), elevation = 100.dp, onClick = {
-        navigateToViewExerciseScreen(exercise.id)
-    }) {
+    Card(
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier
+            .padding(
+                start = 8.dp,
+                end = 8.dp,
+                top = 4.dp,
+                bottom = 4.dp
+            )
+            .fillMaxWidth(),
+        elevation = 100.dp,
+        onClick = {
+            navigateToViewExerciseScreen(exercise.exerciseId)
+        }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -180,30 +200,6 @@ fun ExerciseCard(
                     text = exercise.name,
                     color = MaterialTheme.colors.onSurface,
                     style = MaterialTheme.typography.h1
-                )
-                Spacer(
-                    modifier = Modifier.height(8.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.pb_weight, exercise.pbWeight.toString()),
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.h3
-                )
-                Spacer(
-                    modifier = Modifier.height(2.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.pb_date, exercise.pbDate.format(formatter)),
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.h3
-                )
-                Spacer(
-                    modifier = Modifier.height(2.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.pb_location, exercise.pbLocation),
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.h3
                 )
             }
         }
