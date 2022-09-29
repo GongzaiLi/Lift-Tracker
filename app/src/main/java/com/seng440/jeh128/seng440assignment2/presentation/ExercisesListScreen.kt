@@ -12,13 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
-import com.seng440.jeh128.seng440assignment2.core.Constants.Companion.EMPTY_URI
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
-import java.time.LocalDateTime
+import com.seng440.jeh128.seng440assignment2.navigation.Screen
+import com.seng440.jeh128.seng440assignment2.presentation.components.getIconFromDrawable
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -26,47 +28,37 @@ import java.time.format.DateTimeFormatter
 fun ExercisesListScreen(
     viewModel: ExercisesViewModel,
     navigateToViewExerciseScreen: (exerciseId: Int) -> Unit,
+    navController: NavController
 ) {
     LaunchedEffect(Unit) {
         viewModel.getExercises()
     }
-    Scaffold(
-        topBar = {
-            ExercisesTopBar(
-                viewModel = viewModel
-            )
-        },
-        content = { padding ->
-            ExercisesContent(
-                padding = padding,
-                exercises = viewModel.exercises,
-                navigateToViewExerciseScreen = navigateToViewExerciseScreen,
-                viewModel = viewModel
-            )
-            AddExerciseAlertDialog(
-                openDialog = viewModel.openDialog,
-                closeDialog = {
-                    viewModel.closeDialog()
-                },
-                addExercise = { exercise ->
-                    viewModel.addExercise(exercise)
-                }
-            )
-        },
-        floatingActionButton = {
-            AddExerciseFloatingActionButton(
-                openDialog = {
-                    viewModel.openDialog()
-                }
-            )
-        }
-    )
+    Scaffold(topBar = {
+        ExercisesTopBar(viewModel = viewModel,
+            navigateGoPreference = { navController.navigate(Screen.PreferenceScreen.route) })
+    }, content = { padding ->
+        ExercisesContent(
+            padding = padding,
+            exercises = viewModel.exercises,
+            navigateToViewExerciseScreen = navigateToViewExerciseScreen,
+            viewModel = viewModel
+        )
+        AddExerciseAlertDialog(openDialog = viewModel.openDialog, closeDialog = {
+            viewModel.closeDialog()
+        }, addExercise = { exercise ->
+            viewModel.addExercise(exercise)
+        })
+    }, floatingActionButton = {
+        AddExerciseFloatingActionButton(openDialog = {
+            viewModel.openDialog()
+        })
+    })
 }
 
 
 @Composable
 fun AddExerciseFloatingActionButton(
-    openDialog: () -> Unit
+    openDialog: () -> Unit,
 ) {
     ExtendedFloatingActionButton(
         onClick = openDialog,
@@ -87,9 +79,7 @@ fun AddExerciseFloatingActionButton(
 
 @Composable
 fun AddExerciseAlertDialog(
-    openDialog: Boolean,
-    closeDialog: () -> Unit,
-    addExercise: (exercise: Exercise) -> Unit
+    openDialog: Boolean, closeDialog: () -> Unit, addExercise: (exercise: Exercise) -> Unit
 ) {
     if (openDialog) {
         var name by rememberSaveable { mutableStateOf("") }
@@ -138,8 +128,7 @@ fun AddExerciseAlertDialog(
                         text = stringResource(id = R.string.dismiss)
                     )
                 }
-            }
-        )
+            })
     }
 }
 
@@ -200,11 +189,10 @@ fun ExerciseCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(
-                        fraction = 0.90f
-                    )
-            ){
+                modifier = Modifier.fillMaxWidth(
+                    fraction = 0.90f
+                )
+            ) {
                 Text(
                     text = exercise.name,
                     color = MaterialTheme.colors.onSurface,
@@ -218,13 +206,30 @@ fun ExerciseCard(
 
 @Composable
 fun ExercisesTopBar(
-    viewModel: ExercisesViewModel,
+    viewModel: ExercisesViewModel, navigateGoPreference: () -> Unit
 ) {
-    TopAppBar (
+    TopAppBar(
         title = {
-            Text(
-                text = stringResource(id = R.string.app_name)
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(id = R.string.app_name)
+                )
+                IconButton(
+                    onClick = navigateGoPreference
+                ) {
+                    Icon(
+                        painterResource(id = getIconFromDrawable("ic_baseline_settings_24")),
+                        contentDescription = null,
+                    )
+                }
+
+            }
+
+
         },
     )
 }
