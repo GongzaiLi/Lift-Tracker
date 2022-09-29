@@ -83,6 +83,7 @@ fun AddExerciseAlertDialog(
 ) {
     if (openDialog) {
         var name by rememberSaveable { mutableStateOf("") }
+        var notes by rememberSaveable { mutableStateOf("") }
         val focusRequester = FocusRequester()
 
         AlertDialog(
@@ -105,13 +106,23 @@ fun AddExerciseAlertDialog(
                         },
                         modifier = Modifier.focusRequester(focusRequester)
                     )
+                    TextField(
+                        value = notes,
+                        onValueChange = { notes = it },
+                        placeholder = {
+                            Text(
+                                text = stringResource(id = R.string.exercise_notes)
+                            )
+                        },
+                        modifier = Modifier.focusRequester(focusRequester)
+                    )
                 }
             },
             confirmButton = {
                 TextButton(
                     onClick = {
                         closeDialog()
-                        val exercise = Exercise(0, name, "")
+                        val exercise = Exercise(0, name, notes)
                         addExercise(exercise)
                     }
                 ) {

@@ -85,6 +85,16 @@ fun ViewExerciseContent(
     viewModel: ExercisesViewModel
 ) {
     Column() {
+        Text(
+            text = exercise.name,
+            textAlign = TextAlign.Left,
+            style = MaterialTheme.typography.h1,
+        )
+        Text(
+            text = exercise.exerciseNotes,
+            textAlign = TextAlign.Left,
+            style = MaterialTheme.typography.h3,
+        )
         Button(
             onClick = {
                 val personalBest = PersonalBest(0, exercise.exerciseId, 10.0, "Thames", LocalDateTime.now(), Uri.EMPTY)
@@ -93,11 +103,6 @@ fun ViewExerciseContent(
         ) {
             Text(text = "Add")
         }
-        Text(
-            text = exercise.name,
-            textAlign = TextAlign.Left,
-            style = MaterialTheme.typography.h1,
-        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
