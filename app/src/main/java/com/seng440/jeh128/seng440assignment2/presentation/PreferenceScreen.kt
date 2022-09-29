@@ -1,5 +1,7 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -34,8 +37,15 @@ fun PreferenceScreen(
         }
     ) {
         Column {
-            ToggleThemeAlertDialog(darkMode)
+
+            ModeSwitch(darkMode)
+            ToggleThemeAlertDialog(
+                stringResource(id = R.string.theme),
+                "ic_baseline_color_lens_24",
+                themeType.value.color
+            ) { ThemeBox(themeType) }
         }
+
 
     }
 }
@@ -64,75 +74,55 @@ fun PreferenceTopBar(navigateBack: () -> Unit) {
 
 @Composable
 fun ToggleThemeAlertDialog(
-    darkMode: MutableState<Boolean>,
+    cardName: String,
+    iconName: String,
+    color: Color,
+    title: @Composable () -> Unit
 ) {
-
     val openDialog = remember { mutableStateOf(false) }
 
-    PreferenceCard(stringResource(id = R.string.theme), "ic_baseline_color_lens_24") {
+    PreferenceCard(cardName, iconName, color) {
         openDialog.value = true
     }
 
     if (openDialog.value) {
-
-        AlertDialog(onDismissRequest = {
-            openDialog.value = false
-        }, title = {
-//            Text(
-//                text = "Choose Theme", // todo update
-//                style = MaterialTheme.typography.h2
-//            )
-            DarkModeCheckBox(darkMode)
-
-        }, text = {
-
-        }, confirmButton = {
-            TextButton(onClick = {
+        AlertDialog(
+            onDismissRequest = {
                 openDialog.value = false
-            }) {
-                Text(
-                    text = stringResource(id = R.string.add)
-                )
-            }
-        }, dismissButton = {
-            TextButton(
-                onClick = {
-                    openDialog.value = false
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.dismiss)
-                )
-            }
-        })
+            }, text = {
+                title()
+            }, confirmButton = {})
     }
 }
 
 
 @Composable
-fun PreferenceCard(functionName: String, iconName: String, onClick: () -> Unit) {
+fun PreferenceCard(functionName: String, iconName: String,  color: Color, onClick: () -> Unit) {
 
-    Card (
+    Card(
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
-            .padding(15.dp)
+            .padding(10.dp)
             .clip(RoundedCornerShape(10.dp))
-            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .padding(horizontal = 15.dp, vertical = 10.dp)
             .fillMaxWidth()
             .clickable {
                 onClick()
             },
     ) {
-        Row(            modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                all = 12.dp
-            ),
-            verticalAlignment = Alignment.CenterVertically,) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    all = 12.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Icon(
                 painter = painterResource(id = getIconFromDrawable(iconName = iconName)),
                 contentDescription = null,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(40.dp),
+                tint = color,
             )
             Spacer(modifier = Modifier.padding(40.dp))
             Text(
@@ -145,16 +135,74 @@ fun PreferenceCard(functionName: String, iconName: String, onClick: () -> Unit) 
 }
 
 @Composable
-fun DarkModeCheckBox(darkMode: MutableState<Boolean>) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        Text(text = stringResource(R.string.dark_mode))
-        // Set mode
-        // Select Theme
-        Checkbox(
-            checked = darkMode.value,
-            onCheckedChange = { checked -> darkMode.value = checked },
-        )
-
+fun ModeSwitch(darkMode: MutableState<Boolean>) {
+    val iconName = if (darkMode.value) "ic_baseline_dark_mode_24" else "ic_baseline_light_mode_24"
+    Card(
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier
+            .padding(10.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .padding(horizontal = 15.dp, vertical = 10.dp)
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    all = 12.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painter = painterResource(id = getIconFromDrawable(iconName = iconName)),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.padding(40.dp))
+            Text(
+                text = stringResource(id = R.string.mode),
+                style = MaterialTheme.typography.h2
+            )
+            Spacer(modifier = Modifier.padding(40.dp))
+            Switch(
+                checked = darkMode.value,
+                onCheckedChange = { checked -> darkMode.value = checked }
+            )
+        }
     }
 }
+
+
+@Composable
+fun ThemeBox(themeType: MutableState<ThemeType>) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        enumValues<ThemeType>().forEach { type ->
+            val color = type.color
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .shadow(15.dp, RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(color)
+                    .border(
+                        width = 3.dp,
+                        color = if (themeType.value.color == color) {
+                            Color.Black
+                        } else Color.Transparent,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .clickable {
+                        themeType.value = type
+                    })
+
+        }
+    }
+
+}
+
 
