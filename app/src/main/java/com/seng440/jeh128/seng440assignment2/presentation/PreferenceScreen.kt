@@ -1,6 +1,5 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,17 +18,23 @@ import androidx.navigation.NavController
 import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.navigation.Screen
+import com.seng440.jeh128.seng440assignment2.presentation.components.ThemeType
 import com.seng440.jeh128.seng440assignment2.presentation.components.getIconFromDrawable
 
 @Composable
-fun PreferenceScreen(viewModel: ExercisesViewModel, navController: NavController) {
+fun PreferenceScreen(
+    viewModel: ExercisesViewModel,
+    navController: NavController,
+    darkMode: MutableState<Boolean>,
+    themeType: MutableState<ThemeType>,
+) {
     Scaffold(
         topBar = {
             PreferenceTopBar(navigateBack = { navController.navigate(Screen.MainScreen.route) })
         }
     ) {
         Column {
-            ToggleThemeAlertDialog()
+            ToggleThemeAlertDialog(darkMode)
         }
 
     }
@@ -59,6 +64,7 @@ fun PreferenceTopBar(navigateBack: () -> Unit) {
 
 @Composable
 fun ToggleThemeAlertDialog(
+    darkMode: MutableState<Boolean>,
 ) {
 
     val openDialog = remember { mutableStateOf(false) }
@@ -68,24 +74,21 @@ fun ToggleThemeAlertDialog(
     }
 
     if (openDialog.value) {
-//        var name by rememberSaveable { mutableStateOf("") }
-//        val focusRequester = FocusRequester()
 
         AlertDialog(onDismissRequest = {
             openDialog.value = false
         }, title = {
-            Text(
-                text = "Choose Theme", // todo update
-                style = MaterialTheme.typography.h2
-            )
+//            Text(
+//                text = "Choose Theme", // todo update
+//                style = MaterialTheme.typography.h2
+//            )
+            DarkModeCheckBox(darkMode)
+
         }, text = {
-            Column {
-                Text(text = "Function name") // todo update
-            }
+
         }, confirmButton = {
             TextButton(onClick = {
                 openDialog.value = false
-                /*todo theme change*/
             }) {
                 Text(
                     text = stringResource(id = R.string.add)
@@ -109,30 +112,49 @@ fun ToggleThemeAlertDialog(
 @Composable
 fun PreferenceCard(functionName: String, iconName: String, onClick: () -> Unit) {
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Card (
+        shape = MaterialTheme.shapes.small,
         modifier = Modifier
             .padding(15.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Color.White)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
             .clickable {
                 onClick()
             },
     ) {
+        Row(            modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                all = 12.dp
+            ),
+            verticalAlignment = Alignment.CenterVertically,) {
+            Icon(
+                painter = painterResource(id = getIconFromDrawable(iconName = iconName)),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.padding(40.dp))
+            Text(
+                text = functionName,
+                style = MaterialTheme.typography.h2
+            )
+        }
 
-        Icon(
-            painter = painterResource(id = getIconFromDrawable(iconName = iconName)),
-            contentDescription = null,
-            tint = Color.Black,
-            modifier = Modifier.size(40.dp)
+    }
+}
+
+@Composable
+fun DarkModeCheckBox(darkMode: MutableState<Boolean>) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Text(text = stringResource(R.string.dark_mode))
+        // Set mode
+        // Select Theme
+        Checkbox(
+            checked = darkMode.value,
+            onCheckedChange = { checked -> darkMode.value = checked },
         )
-        Spacer(modifier = Modifier.padding(40.dp))
-        Text(
-            text = functionName,
-            style = MaterialTheme.typography.h2
-        )
+
     }
 }
 

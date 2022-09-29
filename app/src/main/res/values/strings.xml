@@ -9,4 +9,5 @@
     <string name="dismiss">Dismiss</string>
     <string name="preference_name">Preferences</string>
     <string name="theme">Theme</string>
+    <string name="dark_mode">Set mode</string>
 </resources>

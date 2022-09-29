@@ -18,11 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
-import com.seng440.jeh128.seng440assignment2.core.Constants.Companion.EMPTY_URI
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.navigation.Screen
 import com.seng440.jeh128.seng440assignment2.presentation.components.getIconFromDrawable
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -130,8 +128,7 @@ fun AddExerciseAlertDialog(
                         text = stringResource(id = R.string.dismiss)
                     )
                 }
-            }
-        })
+            })
     }
 }
 
