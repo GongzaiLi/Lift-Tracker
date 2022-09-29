@@ -11,4 +11,22 @@
     <string name="preference_name">Preferences</string>
     <string name="theme">Theme</string>
     <string name="mode">Mode</string>
+
+    <!--    Screen Titles-->
+    <string name="log_pb">Log PB</string>
+    <string name="record_pb">Record PB</string>
+
+
+    <!--    Log Pb Screen-->
+    <string name="select_video">Select Video</string>
+    <string name="date">Date</string>
+
+    <!--    Record Pb Screen-->
+    <string name="take_video">Take Video</string>
+
+    <!--    Common-->
+    <string name="weight">Weight</string>
+    <string name="location">Location</string>
+
+
 </resources>
