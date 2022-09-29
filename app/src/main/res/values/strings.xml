@@ -11,10 +11,12 @@
     <string name="preference_name">Preferences</string>
     <string name="theme">Theme</string>
     <string name="mode">Mode</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_time">Select Time</string>
 
     <!--    Screen Titles-->
-    <string name="log_pb">Log PB</string>
-    <string name="record_pb">Record PB</string>
+    <string name="log_pb">Log Personal Best</string>
+    <string name="record_pb">Record Personal Best</string>
 
 
     <!--    Log Pb Screen-->
@@ -22,7 +24,7 @@
     <string name="date">Date</string>
 
     <!--    Record Pb Screen-->
-    <string name="take_video">Take Video</string>
+    <string name="record_video">Record Video</string>
 
     <!--    Common-->
     <string name="weight">Weight</string>
