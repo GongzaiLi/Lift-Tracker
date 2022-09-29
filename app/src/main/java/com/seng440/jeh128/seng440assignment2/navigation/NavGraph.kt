@@ -14,11 +14,11 @@ import com.seng440.jeh128.seng440assignment2.navigation.Screen.MainScreen
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.ViewExerciseScreen
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.PreferenceScreen
 import com.seng440.jeh128.seng440assignment2.presentation.*
+import com.seng440.jeh128.seng440assignment2.presentation.components.ThemeType
 import com.seng440.jeh128.seng440assignment2.ui.theme.BlueTheme
 import com.seng440.jeh128.seng440assignment2.ui.theme.PinkTheme
 import com.seng440.jeh128.seng440assignment2.ui.theme.PurpleTheme
 import com.seng440.jeh128.seng440assignment2.ui.theme.YellowTheme
-import com.seng440.jeh128.seng440assignment2.ui.theme.Seng440Assignment2Theme
 
 @Composable
 fun NavGraph (
