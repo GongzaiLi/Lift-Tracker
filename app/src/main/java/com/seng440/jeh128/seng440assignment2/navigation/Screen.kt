@@ -5,4 +5,5 @@ sealed class Screen(val route: String) {
     object ViewExerciseScreen: Screen("ViewExercise")
     object LogPBScreen: Screen("LogPBScreen")
     object PreferenceScreen: Screen("PreferenceScreen")
+    object VideoPlayerScreen: Screen("VideoPlayer")
 }

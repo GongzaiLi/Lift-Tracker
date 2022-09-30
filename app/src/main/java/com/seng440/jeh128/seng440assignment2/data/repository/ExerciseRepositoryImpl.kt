@@ -4,11 +4,14 @@ import com.seng440.jeh128.seng440assignment2.data.network.ExerciseDao
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
 import com.seng440.jeh128.seng440assignment2.domain.repository.ExerciseRepository
+import kotlinx.coroutines.flow.Flow
 
 class ExerciseRepositoryImpl (private val exerciseDao: ExerciseDao) : ExerciseRepository {
     override suspend fun getExercisesFromRoom() = exerciseDao.getExercises()
 
     override suspend fun getExerciseFromRoom(id: Int) = exerciseDao.getExercise(id)
+
+    override suspend fun getPersonalBestFromRoom(id: Int): Flow<PersonalBest> = exerciseDao.getPersonalBest(id)
 
     override suspend fun addExerciseToRoom(exercise: Exercise) = exerciseDao.addExercise(exercise)
 

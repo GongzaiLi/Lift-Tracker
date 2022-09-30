@@ -1,39 +1,27 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
-import android.net.Uri
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.ExerciseWithPersonalBests
 import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
-import java.time.LocalDateTime
-import com.seng440.jeh128.seng440assignment2.R
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -41,6 +29,7 @@ fun ViewExerciseScreen(
     viewModel: ExercisesViewModel,
     exerciseId: Int,
     navigateToLogPBScreen: () -> Unit,
+    navigateToVideoPlayerScreen: (personalBestId: Int) -> Unit,
     navigateBack: () -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -59,7 +48,8 @@ fun ViewExerciseScreen(
                 padding,
                 exercise = viewModel.exercise,
                 exerciseWithPersonalBests = viewModel.exerciseWithPersonalBests,
-                viewModel = viewModel
+                viewModel = viewModel,
+                navigateToVideoPlayerScreen = navigateToVideoPlayerScreen
             )
         },
         floatingActionButton = {
@@ -121,7 +111,8 @@ fun ViewExerciseContent(
     padding: PaddingValues,
     exercise: Exercise,
     exerciseWithPersonalBests: ExerciseWithPersonalBests,
-    viewModel: ExercisesViewModel
+    viewModel: ExercisesViewModel,
+    navigateToVideoPlayerScreen: (personalBestId: Int) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -150,7 +141,8 @@ fun ViewExerciseContent(
             ) { index, personalBest ->
                 PersonalBestCard(
                     is_current_PB = index == 0,
-                    personalBest = personalBest
+                    personalBest = personalBest,
+                    navigateToVideoPlayerScreen = navigateToVideoPlayerScreen
                 )
             }
         }
@@ -163,7 +155,8 @@ fun ViewExerciseContent(
 @Composable
 fun PersonalBestCard(
     personalBest: PersonalBest,
-    is_current_PB: Boolean
+    is_current_PB: Boolean,
+    navigateToVideoPlayerScreen: (personalBestId: Int) -> Unit,
 ) {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy")
 
@@ -184,13 +177,15 @@ fun PersonalBestCard(
                     .fillMaxWidth()
                     .padding(
                         all = 12.dp
-                    ).background(Color.Yellow)
+                    )
+                    .background(Color.Yellow)
             } else {
                 Modifier
                     .fillMaxWidth()
                     .padding(
                         all = 12.dp
-                    ).background(Color.White)
+                    )
+                    .background(Color.White)
             },
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -217,6 +212,16 @@ fun PersonalBestCard(
                 Text(
                     text = stringResource(id = R.string.pb_location, personalBest.pbLocation),
                     style = MaterialTheme.typography.h3,
+                )
+            }
+            IconButton(
+                onClick = {
+                    navigateToVideoPlayerScreen(personalBest.personalBestId)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.PlayArrow,
+                    contentDescription = null,
                 )
             }
         }
