@@ -1,19 +1,29 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.seng440.jeh128.seng440assignment2.R
@@ -155,15 +165,66 @@ fun ExercisesContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
+            .padding(10.dp, 4.dp)
     ) {
-        items(
-            items = exercises
-        ) { exercise ->
-            ExerciseCard(
-                exercise = exercise,
-                navigateToViewExerciseScreen = navigateToViewExerciseScreen,
-                viewModel
+        itemsIndexed(
+            items = exercises,
+            key = { _, listItem -> listItem.hashCode() }) { _, exercise ->
+
+            val dismissState = rememberDismissState(
+                confirmStateChange = {
+                    if (it == DismissValue.DismissedToStart) {
+                        viewModel.deleteExercise(exercise)
+                    }
+                    true
+                }
             )
+
+            SwipeToDismiss(
+                state = dismissState,
+                directions = setOf(DismissDirection.EndToStart),
+                background = {
+
+                    val color by animateColorAsState(
+                        targetValue = when (dismissState.targetValue) {
+                            DismissValue.Default -> MaterialTheme.colors.background
+                            else -> Color.Red
+                        }
+                    )
+
+                    val icons = Icons.Default.Delete
+
+                    val scale by animateFloatAsState(
+                        targetValue =
+                        if (dismissState.targetValue == DismissValue.Default) 0.8f else 1.2f
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(color)
+                            .padding(start = 12.dp, end = 12.dp),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Icon(icons, contentDescription = null, modifier = Modifier.scale(scale))
+                    }
+                },
+                dismissContent = {
+                    ExerciseCard(
+                        exercise = exercise,
+                        navigateToViewExerciseScreen = navigateToViewExerciseScreen,
+                        viewModel,
+                        elevation = animateDpAsState(
+                            targetValue =
+                            if (dismissState.dismissDirection != null) 4.dp else 0.dp
+                        ).value
+                    )
+
+                }
+            )
+
+
         }
     }
 }
@@ -173,7 +234,8 @@ fun ExercisesContent(
 fun ExerciseCard(
     exercise: Exercise,
     navigateToViewExerciseScreen: (exerciseId: Int) -> Unit,
-    viewModel: ExercisesViewModel
+    viewModel: ExercisesViewModel,
+    elevation: Dp
 ) {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy")
     Card(
@@ -186,10 +248,10 @@ fun ExerciseCard(
                 bottom = 4.dp
             )
             .fillMaxWidth(),
-        elevation = 100.dp,
         onClick = {
             navigateToViewExerciseScreen(exercise.exerciseId)
-        }
+        },
+        elevation = elevation
     ) {
         Row(
             modifier = Modifier
