@@ -137,7 +137,10 @@ fun ViewExerciseContent(
                 .padding(padding)
         ) {
             itemsIndexed(
-                items = exerciseWithPersonalBests.personalBests.reversed()
+                items = exerciseWithPersonalBests.personalBests.reversed(),
+                key = { _, personalBest ->
+                    personalBest.personalBestId
+                }
             ) { index, personalBest ->
                 PersonalBestCard(
                     is_current_PB = index == 0,

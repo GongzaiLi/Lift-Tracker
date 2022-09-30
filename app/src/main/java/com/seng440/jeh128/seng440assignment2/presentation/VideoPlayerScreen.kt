@@ -8,7 +8,10 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
+import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
 import com.seng440.jeh128.seng440assignment2.presentation.components.VideoPlayer
 
 @Composable
@@ -19,17 +22,18 @@ fun VideoPlayerScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.getPersonalBest(personalBestId)
-        viewModel.getExercise(viewModel.personalBest.correspondingExerciseId)
     }
     Scaffold(
         topBar = {
             VideoPlayerTopBar(
                 navigateBack = navigateBack,
-                exerciseName = viewModel.exercise.name
             )
         },
-        content = { padding ->
-            VideoPlayerContent(uri = viewModel.personalBest.videoUri)
+        content = {
+            VideoPlayerContent(
+                personalBest = viewModel.personalBest,
+                personalBestId = personalBestId
+            )
         }
     )
 }
@@ -37,11 +41,12 @@ fun VideoPlayerScreen(
 
 @Composable
 fun VideoPlayerContent(
-    uri: Uri,
+    personalBest: PersonalBest,
+    personalBestId: Int
 ) {
-    if (uri != Uri.EMPTY) {
+    if (personalBest.personalBestId == personalBestId && personalBest.videoUri != Uri.EMPTY) {
         VideoPlayer(
-            uri
+            personalBest.videoUri
         )
     } else {
         CircularProgressIndicator(
@@ -54,12 +59,11 @@ fun VideoPlayerContent(
 @Composable
 fun VideoPlayerTopBar(
     navigateBack: () -> Unit,
-    exerciseName: String
 ) {
     TopAppBar (
         title = {
             Text(
-                text = exerciseName
+                text = stringResource(id = R.string.play_video),
             )
         },
         navigationIcon = {

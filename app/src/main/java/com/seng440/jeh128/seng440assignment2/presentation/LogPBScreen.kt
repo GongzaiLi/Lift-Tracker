@@ -2,10 +2,7 @@ package com.seng440.jeh128.seng440assignment2.presentation
 
 import android.net.Uri
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,11 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
 import com.seng440.jeh128.seng440assignment2.presentation.components.DateTimePicker
+import com.seng440.jeh128.seng440assignment2.presentation.components.GallerySelect
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -56,6 +55,7 @@ fun LogPBScreen(
 }
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LogPBContent(
     exercise: Exercise,
@@ -65,9 +65,11 @@ fun LogPBContent(
     val weight = rememberSaveable { mutableStateOf("") }
     val location = rememberSaveable { mutableStateOf("") }
     val date = rememberSaveable { mutableStateOf(LocalDateTime.now()) }
-    val vidUri by rememberSaveable { mutableStateOf(Uri.EMPTY) }
+    var vidUri by rememberSaveable { mutableStateOf(Uri.EMPTY) }
 
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy - hh:mm a")
+
+    var showGallerySelect by remember { mutableStateOf(false) }
 
     Card(Modifier.fillMaxSize()) {
         Column(
@@ -76,11 +78,22 @@ fun LogPBContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row() {
-                OutlinedButton(onClick = { }) {
-                    Text(stringResource(id = R.string.select_video))
+                if (showGallerySelect) {
+                    GallerySelect(
+                        modifier = Modifier.fillMaxSize(),
+                        onImageUri = { uri ->
+                            showGallerySelect = false
+                            vidUri = uri
+                        }
+                    )
                 }
-                OutlinedButton(onClick = { }) {
-                    Text(stringResource(id = R.string.record_video))
+                else{
+                    OutlinedButton(onClick = { showGallerySelect = true }) {
+                        Text(stringResource(id = R.string.select_video))
+                    }
+                    OutlinedButton(onClick = { }) {
+                        Text(stringResource(id = R.string.record_video))
+                    }
                 }
             }
             OutlinedTextField(

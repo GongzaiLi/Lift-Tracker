@@ -1,18 +1,12 @@
 <resources>
     <string name="app_name">Personal Best Tracker</string>
-    <string name="add_exercise">Add Exercise</string>
-    <string name="exercise_name">Exercise Name</string>
-    <string name="exercise_notes">Exercise Notes</string>
-    <string name="pb_location">Location: %s</string>
-    <string name="pb_weight">Weight: %s kg</string>
-    <string name="pb_date">Date: %s</string>
-    <string name="add">Add</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="preference_name">Preferences</string>
-    <string name="theme">Theme</string>
-    <string name="mode">Mode</string>
-    <string name="select_date">Select Date</string>
-    <string name="select_time">Select Time</string>
+
+    <!-- Permission rationale -->
+    <string name="permission_request">Permission Request</string>
+    <string name="permission_rationale_camera">Camera permissions needed to record video.</string>
+    <string name="permission_rationale_gallery">Gallery permissions needed to record video.</string>
+    <string name="gallery_permission_not_given">Photo gallery permission has been denied. Please open settings and give permissions to access the gallery.</string>
+    <string name="open_setting">Open Setting</string>
 
     <!--    Screen Titles-->
     <string name="log_pb">Log Personal Best</string>
@@ -22,13 +16,29 @@
     <!--    Log Pb Screen-->
     <string name="select_video">Select Video</string>
     <string name="date">Date</string>
-
-    <!--    Record Pb Screen-->
     <string name="record_video">Record Video</string>
+
+    <!-- Video Player Screen -->
+    <string name="play_video">Personal Best Video</string>
+
 
     <!--    Common-->
     <string name="weight">Weight</string>
     <string name="location">Location</string>
-
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="add">Add</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="preference_name">Preferences</string>
+    <string name="theme">Theme</string>
+    <string name="mode">Mode</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_time">Select Time</string>
+    <string name="add_exercise">Add Exercise</string>
+    <string name="exercise_name">Exercise Name</string>
+    <string name="exercise_notes">Exercise Notes</string>
+    <string name="pb_location">Location: %s</string>
+    <string name="pb_weight">Weight: %s kg</string>
+    <string name="pb_date">Date: %s</string>
 
 </resources>
