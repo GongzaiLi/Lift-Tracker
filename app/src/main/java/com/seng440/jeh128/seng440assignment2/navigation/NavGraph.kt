@@ -13,8 +13,11 @@ import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.MainScreen
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.ViewExerciseScreen
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.PreferenceScreen
+import com.seng440.jeh128.seng440assignment2.navigation.Screen.LogPBScreen
+import com.seng440.jeh128.seng440assignment2.navigation.Screen.VideoPlayerScreen
 import com.seng440.jeh128.seng440assignment2.presentation.*
 import com.seng440.jeh128.seng440assignment2.presentation.components.ThemeType
+import com.seng440.jeh128.seng440assignment2.presentation.components.VideoPlayer
 import com.seng440.jeh128.seng440assignment2.ui.theme.BlueTheme
 import com.seng440.jeh128.seng440assignment2.ui.theme.PinkTheme
 import com.seng440.jeh128.seng440assignment2.ui.theme.PurpleTheme
@@ -67,33 +70,31 @@ fun NavGraph (
                 ViewExerciseScreen(
                     viewModel = viewModel,
                     exerciseId = exerciseId,
-                    navigateToLogPBScreen = { navController.navigate(Screen.LogPBScreen.route) },
-                    navigateToRecordPBScreen = { navController.navigate(Screen.RecordPBScreen.route) },
+                    navigateToLogPBScreen = { navController.navigate("${LogPBScreen.route}/${exerciseId}") },
                     navigateBack = {
                         navController.popBackStack()
+                    },
+                    navigateToVideoPlayerScreen = { personalBestId ->
+                        navController.navigate("${VideoPlayerScreen.route}/${personalBestId}")
                     }
                 )
             }
 
             composable(
-                route = Screen.LogPBScreen.route
-            ) {
+                route = "${LogPBScreen.route}/{exerciseId}",
+                arguments = listOf(
+                    navArgument("exerciseId") {
+                        type = NavType.IntType
+                    }
+                )
+            ) { backStackEntry ->
+                val exerciseId = backStackEntry.arguments?.getInt("exerciseId") ?: 0
                 LogPBScreen(
                     viewModel = viewModel,
                     navigateBack = {
                         navController.popBackStack()
-                    }
-                )
-            }
-
-            composable(
-                route = Screen.RecordPBScreen.route
-            ) {
-                RecordPBScreen(
-                    viewModel = viewModel,
-                    navigateBack = {
-                        navController.popBackStack()
-                    }
+                    },
+                    exerciseId = exerciseId,
                 )
             }
             composable(
@@ -104,6 +105,24 @@ fun NavGraph (
                     navController = navController,
                     themeType = themeType,
                     darkMode = darkMode
+                )
+            }
+
+            composable(
+                route = "${VideoPlayerScreen.route}/{personalBestId}",
+                arguments = listOf(
+                    navArgument("personalBestId") {
+                        type = NavType.IntType
+                    }
+                )
+            ) { backStackEntry ->
+                val personalBestId = backStackEntry.arguments?.getInt("personalBestId") ?: 0
+                VideoPlayerScreen(
+                    personalBestId = personalBestId,
+                    navigateBack = {
+                        navController.popBackStack()
+                    },
+                    viewModel = viewModel
                 )
             }
 

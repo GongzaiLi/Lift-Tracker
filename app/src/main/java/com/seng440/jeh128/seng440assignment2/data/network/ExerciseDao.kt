@@ -2,6 +2,7 @@ package com.seng440.jeh128.seng440assignment2.data.network
 
 import androidx.room.*
 import com.seng440.jeh128.seng440assignment2.core.Constants.Companion.EXERCISE_TABLE
+import com.seng440.jeh128.seng440assignment2.core.Constants.Companion.PERSONAL_BEST_TABLE
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.ExerciseWithPersonalBests
 import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
@@ -34,4 +35,7 @@ interface ExerciseDao {
     @Transaction
     @Query("Select * From $EXERCISE_TABLE WHERE exerciseId = :id")
     fun getExercisesWithPersonalBests(id: Int): Flow<ExerciseWithPersonalBests>
+
+    @Query("SELECT * FROM $PERSONAL_BEST_TABLE WHERE personalBestId = :id")
+    fun getPersonalBest(id: Int): Flow<PersonalBest>
 }

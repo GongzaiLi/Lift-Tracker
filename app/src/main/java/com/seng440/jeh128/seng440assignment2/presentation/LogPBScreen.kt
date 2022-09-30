@@ -1,29 +1,37 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
+import android.net.Uri
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
+import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
+import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
+import com.seng440.jeh128.seng440assignment2.presentation.components.DateTimePicker
+import com.seng440.jeh128.seng440assignment2.presentation.components.GallerySelect
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun LogPBScreen(
     viewModel: ExercisesViewModel,
+    exerciseId: Int,
     navigateBack: () -> Unit,
 ) {
-    val showCreateDialog = rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        viewModel.getExercise(exerciseId)
+    }
 
     Scaffold(
         topBar = {
@@ -31,16 +39,14 @@ fun LogPBScreen(
                 navigateBack()
             }
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { showCreateDialog.value = !showCreateDialog.value }) {
-                Icon(
-                    imageVector = if (showCreateDialog.value) Icons.Default.Clear else Icons.Filled.Add,
-                    contentDescription = null
-                )
-            }
-        }
     ) {
-        if (showCreateDialog.value) LogPBContent()
+        LogPBContent(
+            exercise = viewModel.exercise,
+            navigateBack = navigateBack,
+            addPersonalBest =  { personalBest ->
+                viewModel.addPersonalBest(personalBest)
+            }
+        )
     }
 
     BackHandler {
@@ -49,12 +55,21 @@ fun LogPBScreen(
 }
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LogPBContent(
+    exercise: Exercise,
+    navigateBack: () -> Unit,
+    addPersonalBest: (personalBest: PersonalBest) -> Unit,
 ) {
     val weight = rememberSaveable { mutableStateOf("") }
     val location = rememberSaveable { mutableStateOf("") }
-    val date = rememberSaveable { mutableStateOf("") }
+    val date = rememberSaveable { mutableStateOf(LocalDateTime.now()) }
+    var vidUri by rememberSaveable { mutableStateOf(Uri.EMPTY) }
+
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy - hh:mm a")
+
+    var showGallerySelect by remember { mutableStateOf(false) }
 
     Card(Modifier.fillMaxSize()) {
         Column(
@@ -62,7 +77,27 @@ fun LogPBContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Row() {
+                if (showGallerySelect) {
+                    GallerySelect(
+                        modifier = Modifier.fillMaxSize(),
+                        onImageUri = { uri ->
+                            showGallerySelect = false
+                            vidUri = uri
+                        }
+                    )
+                }
+                else{
+                    OutlinedButton(onClick = { showGallerySelect = true }) {
+                        Text(stringResource(id = R.string.select_video))
+                    }
+                    OutlinedButton(onClick = { }) {
+                        Text(stringResource(id = R.string.record_video))
+                    }
+                }
+            }
             OutlinedTextField(
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 value = weight.value,
                 onValueChange = { weight.value = it },
                 label = { Text(stringResource(id = R.string.weight)) })
@@ -72,13 +107,39 @@ fun LogPBContent(
                 onValueChange = { location.value = it },
                 label = { Text(stringResource(id = R.string.location)) })
 
-            OutlinedTextField(
-                value = date.value,
-                onValueChange = { date.value = it },
-                label = { Text(stringResource(id = R.string.date)) })
+            TextField(
+                value = date.value.format(formatter),
+                onValueChange = {},
+                label = {
+                    Text (stringResource(id = R.string.date))
+                },
+                readOnly = true
+            )
+            DateTimePicker(
+                onDateSelected = { localDateTime ->
+                    date.value = localDateTime
+                }
+            )
 
-            OutlinedButton(onClick = { }) {
-                Text(stringResource(id = R.string.select_video))
+            TextButton(
+                onClick = {
+
+                    var weightVal = weight.value.toDoubleOrNull()
+                    if (weightVal == null) {
+                        weightVal = 0.0
+                    }
+
+                    navigateBack()
+                    val personalBest = PersonalBest(0,
+                        exercise.exerciseId, weightVal, location.value,
+                        date.value, vidUri
+                    )
+                    addPersonalBest(personalBest)
+                }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.add)
+                )
             }
         }
     }

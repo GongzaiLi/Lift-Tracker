@@ -10,6 +10,8 @@ interface ExerciseRepository {
 
     suspend fun getExerciseFromRoom(id: Int): Flow<Exercise>
 
+    suspend fun getPersonalBestFromRoom(id: Int): Flow<PersonalBest>
+
     suspend fun addExerciseToRoom(exercise: Exercise)
 
     suspend fun updateExerciseInRoom(exercise: Exercise)

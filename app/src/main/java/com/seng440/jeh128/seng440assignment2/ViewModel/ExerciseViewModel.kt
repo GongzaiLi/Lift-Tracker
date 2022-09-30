@@ -1,5 +1,6 @@
 package com.seng440.jeh128.seng440assignment2.ViewModel
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +13,7 @@ import com.seng440.jeh128.seng440assignment2.domain.repository.ExerciseRepositor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +24,7 @@ class ExercisesViewModel @Inject constructor(
     var exercise by mutableStateOf(Exercise(0, "", ""))
     var exerciseWithPersonalBests by mutableStateOf(ExerciseWithPersonalBests(Exercise(0, "", ""), emptyList<PersonalBest>()))
     var openDialog by mutableStateOf(false)
+    var personalBest by mutableStateOf(PersonalBest(0, 0, 0.0, "" , LocalDateTime.now(), Uri.EMPTY))
     var deletingExercises by mutableStateOf(false)
 
     fun getExercises() {
@@ -36,6 +39,14 @@ class ExercisesViewModel @Inject constructor(
         viewModelScope.launch {
             repo.getExerciseFromRoom(id).collect { response ->
                 exercise = response
+            }
+        }
+    }
+
+    fun getPersonalBest(id: Int) {
+        viewModelScope.launch {
+            repo.getPersonalBestFromRoom(id).collect { response ->
+                personalBest = response
             }
         }
     }
