@@ -299,10 +299,7 @@ fun ExercisesTopBar(
                         contentDescription = null,
                     )
                 }
-
             }
-
-
         },
     )
 }
