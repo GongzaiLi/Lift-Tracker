@@ -5,31 +5,32 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionRequired
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.*
 import com.seng440.jeh128.seng440assignment2.R
 
 @ExperimentalPermissionsApi
 @Composable
 fun Permission(
-    permission: String,// = android.Manifest.permission.CAMERA,
-    rationale: String,// = stringResource(id = R.string.permission_rationale),
+    permissions: List<String>,
+    rationale: String,
     permissionNotAvailableContent: @Composable () -> Unit = { },
     content: @Composable () -> Unit = { }
 ) {
-    val permissionState = rememberPermissionState(permission)
-    PermissionRequired(
-        permissionState = permissionState,
-        permissionNotGrantedContent = {
+    val permissionState = rememberMultiplePermissionsState(
+        permissions = permissions
+    )
+    PermissionsRequired(
+        multiplePermissionsState = permissionState,
+        permissionsNotGrantedContent = {
             Rationale(
                 text = rationale,
-                onRequestPermission = { permissionState.launchPermissionRequest() }
+                onRequestPermission = { permissionState.launchMultiplePermissionRequest() }
             )
         },
-        permissionNotAvailableContent = permissionNotAvailableContent,
+        permissionsNotAvailableContent = permissionNotAvailableContent,
         content = content
     )
+
 }
 
 @Composable

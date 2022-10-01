@@ -3,6 +3,7 @@ package com.seng440.jeh128.seng440assignment2.presentation
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -20,6 +21,7 @@ import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
 import com.seng440.jeh128.seng440assignment2.presentation.components.DateTimePicker
 import com.seng440.jeh128.seng440assignment2.presentation.components.GallerySelect
+import com.seng440.jeh128.seng440assignment2.presentation.components.VideoCapture
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -70,6 +72,7 @@ fun LogPBContent(
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy - hh:mm a")
 
     var showGallerySelect by remember { mutableStateOf(false) }
+    var showRecordVideo by remember { mutableStateOf(false) }
 
     Card(Modifier.fillMaxSize()) {
         Column(
@@ -77,7 +80,7 @@ fun LogPBContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row() {
+            Row {
                 if (showGallerySelect) {
                     GallerySelect(
                         modifier = Modifier.fillMaxSize(),
@@ -86,12 +89,30 @@ fun LogPBContent(
                             vidUri = uri
                         }
                     )
+                } else if (showRecordVideo) {
+                    VideoCapture(
+                        modifier = Modifier.fillMaxSize(),
+                        onVideoUri = { uri ->
+                            showRecordVideo = false
+                            vidUri = uri
+                        }
+                    )
                 }
                 else{
-                    OutlinedButton(onClick = { showGallerySelect = true }) {
+                    OutlinedButton(
+                        onClick = {
+                            showGallerySelect = true
+                            showRecordVideo = false
+                        }
+                    ) {
                         Text(stringResource(id = R.string.select_video))
                     }
-                    OutlinedButton(onClick = { }) {
+                    OutlinedButton(
+                        onClick = {
+                            showGallerySelect = false
+                            showRecordVideo = true
+                        }
+                    ) {
                         Text(stringResource(id = R.string.record_video))
                     }
                 }

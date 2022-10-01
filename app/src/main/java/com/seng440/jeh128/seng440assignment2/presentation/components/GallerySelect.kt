@@ -47,7 +47,7 @@ fun GallerySelect(
     }
 
     Permission(
-        permission = Manifest.permission.ACCESS_MEDIA_LOCATION,
+        permissions = listOf(Manifest.permission.ACCESS_MEDIA_LOCATION),
         rationale = stringResource(id = R.string.permission_rationale_gallery),
         permissionNotAvailableContent = {
             Column(modifier) {

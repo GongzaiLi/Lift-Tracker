@@ -72,6 +72,12 @@ dependencies {
     // Exo Player Library
     implementation "com.google.android.exoplayer:exoplayer:$exoplayer_version"
 
+    // CameraX
+    implementation "androidx.camera:camera-lifecycle:$cameraxVersion"
+    implementation "androidx.camera:camera-video:$cameraxVersion"
+    implementation "androidx.camera:camera-view:$cameraxVersion"
+    implementation "androidx.camera:camera-extensions:$cameraxVersion"
+
     //Preview
     implementation 'androidx.compose.ui:ui-tooling-preview:1.1.1'
     debugImplementation 'androidx.compose.ui:ui-tooling:1.1.1'

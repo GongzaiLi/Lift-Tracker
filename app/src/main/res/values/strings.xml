@@ -3,9 +3,10 @@
 
     <!-- Permission rationale -->
     <string name="permission_request">Permission Request</string>
-    <string name="permission_rationale_camera">Camera permissions needed to record video.</string>
-    <string name="permission_rationale_gallery">Gallery permissions needed to record video.</string>
+    <string name="permission_rationale_camera_and_audio">Camera and audio permissions needed to record video.</string>
+    <string name="permission_rationale_gallery">Gallery permissions needed to get video.</string>
     <string name="gallery_permission_not_given">Photo gallery permission has been denied. Please open settings and give permissions to access the gallery.</string>
+    <string name="camera_and_audio_permission_not_given">Camera and audio permissions needed to record video have been denied. Please open settings and give permissions to access the camera and audio.</string>
     <string name="open_setting">Open Setting</string>
 
     <!--    Screen Titles-->

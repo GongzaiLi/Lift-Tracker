@@ -10,6 +10,7 @@ buildscript {
         hilt_navigation_compose_version = "1.0.0"
         permission_version = "0.23.1"
         exoplayer_version = "2.18.1"
+        cameraxVersion = '1.1.0'
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
