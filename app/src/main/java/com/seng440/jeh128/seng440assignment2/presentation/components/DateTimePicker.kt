@@ -46,7 +46,7 @@ fun DateTimePicker (
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, newyear: Int, newMonth: Int, dayOfMonth: Int ->
-            onDateSelected(LocalDateTime.of(newyear, newMonth, dayOfMonth, hour, minute, 0))
+            onDateSelected(LocalDateTime.of(newyear, newMonth + 1, dayOfMonth, hour, minute, 0))
         },
         year,
         month,

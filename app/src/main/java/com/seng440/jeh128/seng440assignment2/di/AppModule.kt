@@ -3,6 +3,7 @@ package com.seng440.jeh128.seng440assignment2.di
 import android.content.Context
 import androidx.room.Room
 import com.seng440.jeh128.seng440assignment2.core.Constants.Companion.EXERCISE_TABLE
+import com.seng440.jeh128.seng440assignment2.data.local.LocationHandler
 import com.seng440.jeh128.seng440assignment2.data.network.ExerciseDao
 import com.seng440.jeh128.seng440assignment2.data.network.ExerciseDb
 import com.seng440.jeh128.seng440assignment2.data.repository.ExerciseRepositoryImpl
@@ -37,4 +38,10 @@ class AppModule {
     ): ExerciseRepository = ExerciseRepositoryImpl(
         exerciseDao = exerciseDao
     )
+
+    @Provides
+    fun provideLocationHandler(
+        @ApplicationContext
+        context: Context
+    ): LocationHandler = LocationHandler(context)
 }
