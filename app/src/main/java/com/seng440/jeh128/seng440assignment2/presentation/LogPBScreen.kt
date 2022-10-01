@@ -86,8 +86,9 @@ fun LogPBScreen(
             toggleUseMyLocation = {
                 useMyLocation = !useMyLocation
             },
-            getCurrentLocation = {
-                viewModel.getCurrentLocation()
+            locationPermissionGranted = {
+//                viewModel.getCurrentLocation()
+                //do something?
             },
             addPersonalBest = { personalBest ->
                 viewModel.addPersonalBest(personalBest)
@@ -107,8 +108,8 @@ fun LogPBContent(
     exercise: Exercise,
     navigateBack: () -> Unit,
     useMyLocation: Boolean,
-    myCurrentLocation: Pair<Double, Double>?,
-    getCurrentLocation: () -> Unit,
+    myCurrentLocation: String,
+    locationPermissionGranted: () -> Unit,
     addPersonalBest: (personalBest: PersonalBest) -> Unit,
     toggleUseMyLocation: () -> Unit
 ) {
@@ -117,7 +118,7 @@ fun LogPBContent(
         rememberSaveable(
             useMyLocation,
             myCurrentLocation
-        ) { mutableStateOf(if (useMyLocation) myCurrentLocation.toString() else "") }
+        ) { mutableStateOf(if (useMyLocation) myCurrentLocation else "") }
     val date = rememberSaveable { mutableStateOf(LocalDateTime.now()) }
     var vidUri by rememberSaveable { mutableStateOf(Uri.EMPTY) }
 
@@ -169,12 +170,14 @@ fun LogPBContent(
                 }
             }
             OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(0.7f),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 value = weight.value,
                 onValueChange = { weight.value = it },
                 label = { Text(stringResource(id = R.string.weight)) })
 
             OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(0.7f),
                 value = location.value,
                 onValueChange = { location.value = it },
                 label = { Text(stringResource(id = R.string.location)) },
@@ -189,12 +192,13 @@ fun LogPBContent(
 
             if (useMyLocation) {
                 RequestLocationPermissions {
-                    getCurrentLocation()
+                    locationPermissionGranted()
                 }
             }
 
 
             OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(0.7f),
                 value = date.value.format(formatter),
                 onValueChange = {},
                 label = {
@@ -257,7 +261,7 @@ fun LogPBTopBar(
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun RequestLocationPermissions(getCurrentLocation: () -> Unit) {
+fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
     val locationPermissionsState = rememberMultiplePermissionsState(
         listOf(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -267,7 +271,7 @@ fun RequestLocationPermissions(getCurrentLocation: () -> Unit) {
 
     if (locationPermissionsState.allPermissionsGranted) {
         Text("Note: Using current location.")
-        getCurrentLocation()
+        locationPermissionGranted()
     } else {
         Column {
             val allPermissionsRevoked =

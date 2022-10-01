@@ -4,8 +4,10 @@ import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.data.local.LocationHandler
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.ExerciseWithPersonalBests
@@ -13,7 +15,6 @@ import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
 import com.seng440.jeh128.seng440assignment2.domain.repository.ExerciseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -25,12 +26,17 @@ class ExercisesViewModel @Inject constructor(
 ) : ViewModel() {
     var exercises by mutableStateOf(emptyList<Exercise>())
     var exercise by mutableStateOf(Exercise(0, "", ""))
-    var exerciseWithPersonalBests by mutableStateOf(ExerciseWithPersonalBests(Exercise(0, "", ""), emptyList<PersonalBest>()))
+    var exerciseWithPersonalBests by mutableStateOf(
+        ExerciseWithPersonalBests(
+            Exercise(0, "", ""),
+            emptyList<PersonalBest>()
+        )
+    )
     var openDialog by mutableStateOf(false)
-    var personalBest by mutableStateOf(PersonalBest(0, 0, 0.0, "" , LocalDateTime.now(), Uri.EMPTY))
+    var personalBest by mutableStateOf(PersonalBest(0, 0, 0.0, "", LocalDateTime.now(), Uri.EMPTY))
     var deletingExercises by mutableStateOf(false)
 
-    var currentLocation by mutableStateOf<Pair<Double, Double>?>(null)
+    var currentLocation by mutableStateOf("")
 
     fun getExercises() {
         viewModelScope.launch {
@@ -124,7 +130,8 @@ class ExercisesViewModel @Inject constructor(
 
     fun getCurrentLocation() {
         viewModelScope.launch {
-            currentLocation = locationHandler.getCurrentLocation()
+            currentLocation = "Loading..."
+            currentLocation = locationHandler.getCurrentLocationString()
         }
     }
 }
