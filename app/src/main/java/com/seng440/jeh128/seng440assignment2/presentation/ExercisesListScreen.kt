@@ -31,6 +31,7 @@ import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.core.NotificationService
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.navigation.Screen
+import com.seng440.jeh128.seng440assignment2.presentation.components.ShareButton
 import com.seng440.jeh128.seng440assignment2.presentation.components.getIconFromDrawable
 import java.time.format.DateTimeFormatter
 
@@ -275,6 +276,7 @@ fun ExerciseCard(
                     style = MaterialTheme.typography.h1
                 )
             }
+            ShareButton(title = "test todo", subject = "test todo", text = exercise.name)
         }
     }
 }
