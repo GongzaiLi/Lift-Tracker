@@ -28,8 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
+import com.seng440.jeh128.seng440assignment2.core.NotificationService
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.navigation.Screen
+import com.seng440.jeh128.seng440assignment2.presentation.components.ShareButton
 import com.seng440.jeh128.seng440assignment2.presentation.components.getIconFromDrawable
 import java.time.format.DateTimeFormatter
 
@@ -38,7 +40,8 @@ import java.time.format.DateTimeFormatter
 fun ExercisesListScreen(
     viewModel: ExercisesViewModel,
     navigateToViewExerciseScreen: (exerciseId: Int) -> Unit,
-    navController: NavController
+    navController: NavController,
+    notificationService: NotificationService
 ) {
     LaunchedEffect(Unit) {
         viewModel.getExercises()
@@ -60,6 +63,7 @@ fun ExercisesListScreen(
         })
     }, floatingActionButton = {
         AddExerciseFloatingActionButton(openDialog = {
+            notificationService.showNotification("Adding exercise now")
             viewModel.openDialog()
         })
     })
@@ -272,6 +276,7 @@ fun ExerciseCard(
                     style = MaterialTheme.typography.h1
                 )
             }
+            ShareButton(title = "test todo", subject = "test todo", text = exercise.name)
         }
     }
 }

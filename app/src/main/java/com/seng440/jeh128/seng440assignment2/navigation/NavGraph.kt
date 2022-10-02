@@ -10,14 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
-import com.seng440.jeh128.seng440assignment2.navigation.Screen.MainScreen
-import com.seng440.jeh128.seng440assignment2.navigation.Screen.ViewExerciseScreen
-import com.seng440.jeh128.seng440assignment2.navigation.Screen.PreferenceScreen
-import com.seng440.jeh128.seng440assignment2.navigation.Screen.LogPBScreen
-import com.seng440.jeh128.seng440assignment2.navigation.Screen.VideoPlayerScreen
+import com.seng440.jeh128.seng440assignment2.core.NotificationService
+import com.seng440.jeh128.seng440assignment2.navigation.Screen.*
 import com.seng440.jeh128.seng440assignment2.presentation.*
 import com.seng440.jeh128.seng440assignment2.presentation.components.ThemeType
-import com.seng440.jeh128.seng440assignment2.presentation.components.VideoPlayer
 import com.seng440.jeh128.seng440assignment2.ui.theme.BlueTheme
 import com.seng440.jeh128.seng440assignment2.ui.theme.PinkTheme
 import com.seng440.jeh128.seng440assignment2.ui.theme.PurpleTheme
@@ -26,6 +22,7 @@ import com.seng440.jeh128.seng440assignment2.ui.theme.YellowTheme
 @Composable
 fun NavGraph (
     navController: NavHostController,
+    notificationService: NotificationService
 ) {
     val viewModel: ExercisesViewModel = hiltViewModel()
 
@@ -55,7 +52,8 @@ fun NavGraph (
                     navigateToViewExerciseScreen = { exerciseId ->
                         navController.navigate("${ViewExerciseScreen.route}/${exerciseId}")
                     },
-                    navController = navController
+                    navController = navController,
+                    notificationService = notificationService,
                 )
             }
             composable(
