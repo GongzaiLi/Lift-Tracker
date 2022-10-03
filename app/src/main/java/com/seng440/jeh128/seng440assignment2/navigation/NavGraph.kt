@@ -2,6 +2,7 @@ package com.seng440.jeh128.seng440assignment2.navigation
 
 
 import android.content.SharedPreferences
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -11,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.core.NotificationService
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.*
@@ -45,7 +47,10 @@ fun NavGraph(
         }
 
 
+
     themeFunction.invoke(darkMode.value) {
+        val systemUiController = rememberSystemUiController()
+        systemUiController.setStatusBarColor(MaterialTheme.colors.primaryVariant)
 
         NavHost(
             navController = navController,
