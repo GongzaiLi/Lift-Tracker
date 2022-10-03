@@ -1,5 +1,7 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,11 +19,14 @@ class MainActivity : ComponentActivity() {
 
 //        WindowCompat.setDecorFitsSystemWindows(window, false)
         val notificationService = NotificationService(applicationContext)
+        val sharePreferences: SharedPreferences =
+            getSharedPreferences("Preference_data", Context.MODE_PRIVATE)
 
         setContent {
             NavGraph(
                 navController = rememberNavController(),
-                notificationService = notificationService
+                notificationService = notificationService,
+                sharedPreferences = sharePreferences,
             )
         }
     }

@@ -1,5 +1,7 @@
 package com.seng440.jeh128.seng440assignment2.navigation
 
+
+import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,20 +16,24 @@ import com.seng440.jeh128.seng440assignment2.core.NotificationService
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.*
 import com.seng440.jeh128.seng440assignment2.presentation.*
 import com.seng440.jeh128.seng440assignment2.presentation.components.ThemeType
-import com.seng440.jeh128.seng440assignment2.ui.theme.BlueTheme
-import com.seng440.jeh128.seng440assignment2.ui.theme.PinkTheme
-import com.seng440.jeh128.seng440assignment2.ui.theme.PurpleTheme
-import com.seng440.jeh128.seng440assignment2.ui.theme.YellowTheme
+import com.seng440.jeh128.seng440assignment2.ui.theme.*
+
 
 @Composable
-fun NavGraph (
+fun NavGraph(
     navController: NavHostController,
-    notificationService: NotificationService
+    notificationService: NotificationService,
+    sharedPreferences: SharedPreferences,
 ) {
     val viewModel: ExercisesViewModel = hiltViewModel()
 
-    val darkMode = remember { mutableStateOf(false) }
-    val themeType = remember { mutableStateOf(ThemeType.PURPLE) }
+    val darkModeValue: Boolean = sharedPreferences.getBoolean("dark_mode", false)
+    val themeTypeValue: String? = sharedPreferences.getString("theme_type", "PURPLE")
+    val textStyle: ThemeType = ThemeType.valueOf(themeTypeValue ?: "PURPLE")
+
+    val darkMode = remember { mutableStateOf(darkModeValue) }
+    val themeType = remember { mutableStateOf(textStyle) }
+
     val themeFunction: @Composable (
         isDarkMode: Boolean, content: @Composable () -> Unit
     ) -> Unit =
@@ -37,6 +43,7 @@ fun NavGraph (
             ThemeType.BLUE -> { isDarkMode, content -> BlueTheme(isDarkMode, content) }
             ThemeType.PINK -> { isDarkMode, content -> PinkTheme(isDarkMode, content) }
         }
+
 
     themeFunction.invoke(darkMode.value) {
 
@@ -102,7 +109,8 @@ fun NavGraph (
                     viewModel = viewModel,
                     navController = navController,
                     themeType = themeType,
-                    darkMode = darkMode
+                    darkMode = darkMode,
+                    sharedPreferences = sharedPreferences,
                 )
             }
 

@@ -1,5 +1,6 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,7 +31,10 @@ fun PreferenceScreen(
     navController: NavController,
     darkMode: MutableState<Boolean>,
     themeType: MutableState<ThemeType>,
+    sharedPreferences: SharedPreferences,
 ) {
+    val sharedPreferencesEditor = sharedPreferences.edit()
+
     Scaffold(
         topBar = {
             PreferenceTopBar(navigateBack = { navController.navigate(Screen.MainScreen.route) })
@@ -38,12 +42,12 @@ fun PreferenceScreen(
     ) {
         Column {
 
-            ModeSwitch(darkMode)
+            ModeSwitch(darkMode, sharedPreferencesEditor)
             ToggleThemeAlertDialog(
                 stringResource(id = R.string.theme),
                 "ic_baseline_color_lens_24",
                 themeType.value.color
-            ) { ThemeBox(themeType) }
+            ) { ThemeBox(themeType, sharedPreferencesEditor) }
         }
 
 
@@ -97,7 +101,7 @@ fun ToggleThemeAlertDialog(
 
 
 @Composable
-fun PreferenceCard(functionName: String, iconName: String,  color: Color, onClick: () -> Unit) {
+fun PreferenceCard(functionName: String, iconName: String, color: Color, onClick: () -> Unit) {
 
     Card(
         shape = MaterialTheme.shapes.small,
@@ -135,7 +139,10 @@ fun PreferenceCard(functionName: String, iconName: String,  color: Color, onClic
 }
 
 @Composable
-fun ModeSwitch(darkMode: MutableState<Boolean>) {
+fun ModeSwitch(
+    darkMode: MutableState<Boolean>,
+    sharedPreferencesEditor: SharedPreferences.Editor
+) {
     val iconName = if (darkMode.value) "ic_baseline_dark_mode_24" else "ic_baseline_light_mode_24"
     Card(
         shape = MaterialTheme.shapes.small,
@@ -166,7 +173,12 @@ fun ModeSwitch(darkMode: MutableState<Boolean>) {
             Spacer(modifier = Modifier.padding(40.dp))
             Switch(
                 checked = darkMode.value,
-                onCheckedChange = { checked -> darkMode.value = checked }
+                onCheckedChange = {
+                        checked ->
+                    darkMode.value = checked
+                    sharedPreferencesEditor.putBoolean("dark_mode", checked)
+                    sharedPreferencesEditor.commit()
+                }
             )
         }
     }
@@ -174,7 +186,10 @@ fun ModeSwitch(darkMode: MutableState<Boolean>) {
 
 
 @Composable
-fun ThemeBox(themeType: MutableState<ThemeType>) {
+fun ThemeBox(
+    themeType: MutableState<ThemeType>,
+    sharedPreferencesEditor: SharedPreferences.Editor
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -198,6 +213,8 @@ fun ThemeBox(themeType: MutableState<ThemeType>) {
                     )
                     .clickable {
                         themeType.value = type
+                        sharedPreferencesEditor.putString("theme_type", type.name)
+                        sharedPreferencesEditor.commit()
                     })
 
         }
