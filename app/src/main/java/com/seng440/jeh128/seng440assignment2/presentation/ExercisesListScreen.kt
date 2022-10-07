@@ -276,7 +276,6 @@ fun ExerciseCard(
                     style = MaterialTheme.typography.h1
                 )
             }
-            ShareButton(title = "test todo", subject = "test todo", text = exercise.name)
         }
     }
 }

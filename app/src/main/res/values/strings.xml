@@ -22,6 +22,12 @@
     <!-- Video Player Screen -->
     <string name="play_video">Personal Best Video</string>
 
+<!--    View Exercise Screen-->
+    <string name="personal_best_share_text">Sharing my latest personal best with you. \n
+                        Exercise: %s  \n
+                        Weight: %s \n
+                        Location: %s</string>
+
 
     <!--    Common-->
     <string name="weight">Weight</string>
@@ -42,5 +48,6 @@
     <string name="pb_weight">Weight: %s kg</string>
     <string name="pb_date">Date: %s</string>
     <string name="loading">Loading...</string>
+    <string name="myPersonalbest">My Personal Best</string>
 
 </resources>

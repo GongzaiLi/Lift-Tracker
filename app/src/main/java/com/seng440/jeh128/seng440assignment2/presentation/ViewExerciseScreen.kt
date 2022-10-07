@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.ExerciseWithPersonalBests
 import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
+import com.seng440.jeh128.seng440assignment2.presentation.components.ShareButton
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -121,23 +123,39 @@ fun ViewExerciseContent(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(
-            text = exercise.name,
-            textAlign = TextAlign.Left,
-            style = MaterialTheme.typography.h1,
-        )
-        Text(
-            text = exercise.exerciseNotes,
-            textAlign = TextAlign.Left,
-            style = MaterialTheme.typography.h3,
-        )
+        val personalBestList = remember { exerciseWithPersonalBests.personalBests.reversed() }
+        val topPersonalBest = personalBestList.sortedBy { it.pbWeight }.reversed().firstOrNull()
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Column {
+
+                Text(
+                    text = exercise.name,
+                    textAlign = TextAlign.Left,
+                    style = MaterialTheme.typography.h1,
+                )
+                Text(
+                    text = exercise.exerciseNotes,
+                    textAlign = TextAlign.Left,
+                    style = MaterialTheme.typography.h3,
+                )
+            }
+
+            ShareButton(
+                title = stringResource(R.string.myPersonalbest),
+                subject = stringResource(R.string.myPersonalbest),
+                text = stringResource(
+                    R.string.personal_best_share_text, exercise.name,
+                    topPersonalBest?.pbWeight.toString(), topPersonalBest?.pbLocation.toString()
+                )
+            )
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
             itemsIndexed(
-                items = exerciseWithPersonalBests.personalBests.reversed(),
+                items = personalBestList,
                 key = { _, personalBest ->
                     personalBest.personalBestId
                 }
@@ -197,16 +215,22 @@ fun PersonalBestCard(
                     .fillMaxWidth(
                         fraction = 0.90f
                     )
-            ){
+            ) {
                 Text(
-                    text = stringResource(id = R.string.pb_weight, personalBest.pbWeight.toString()),
+                    text = stringResource(
+                        id = R.string.pb_weight,
+                        personalBest.pbWeight.toString()
+                    ),
                     style = MaterialTheme.typography.h2,
                 )
                 Spacer(
                     modifier = Modifier.height(2.dp)
                 )
                 Text(
-                    text = stringResource(id = R.string.pb_date, personalBest.pbDate.format(formatter)),
+                    text = stringResource(
+                        id = R.string.pb_date,
+                        personalBest.pbDate.format(formatter)
+                    ),
                     style = MaterialTheme.typography.h3,
                 )
                 Spacer(
