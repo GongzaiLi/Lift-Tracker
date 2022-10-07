@@ -18,14 +18,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
 //        WindowCompat.setDecorFitsSystemWindows(window, false)
-        val notificationService = NotificationService(applicationContext)
         val sharePreferences: SharedPreferences =
             getSharedPreferences("Preference_data", Context.MODE_PRIVATE)
 
         setContent {
             NavGraph(
                 navController = rememberNavController(),
-                notificationService = notificationService,
                 sharedPreferences = sharePreferences,
             )
         }

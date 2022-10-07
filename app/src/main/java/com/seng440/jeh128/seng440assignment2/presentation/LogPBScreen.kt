@@ -92,6 +92,7 @@ fun LogPBScreen(
             },
             addPersonalBest = { personalBest ->
                 viewModel.addPersonalBest(personalBest)
+                viewModel.showNotification(personalBest)
             }
         )
     }
