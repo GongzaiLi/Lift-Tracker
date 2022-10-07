@@ -10,16 +10,18 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun ShareButton(title: String, subject: String, text: String) {
-    val intent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_SUBJECT, subject)
-        putExtra(Intent.EXTRA_TEXT, text)
-        type = "text/plain"
-    }
-    val shareIntent = Intent.createChooser(intent, title) // title
-    val content = LocalContext.current
+//    val intent: Intent = Intent().apply {
+//        action = Intent.ACTION_SEND
+//        putExtra(Intent.EXTRA_SUBJECT, subject)
+//        putExtra(Intent.EXTRA_TEXT, text)
+//        type = "text/plain"
+//    }
+//    val shareIntent = Intent.createChooser(intent, title) // title
 
-    IconButton(onClick = { content.startActivity(shareIntent) }) {
+    val shareIntent = createShareIntent(title, subject, text)
+    val context = LocalContext.current
+
+    IconButton(onClick = { context.startActivity(shareIntent) }) {
         Icon(Icons.Default.Share, contentDescription = null)
     }
 

@@ -18,7 +18,7 @@ class NotificationService(
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    fun showNotification(text: String) {
+    fun showNotification(exerciseName: String, weight: String, location: String) {
         val activityIntent = Intent(context, MainActivity::class.java)
         val activityPendingIntent = PendingIntent.getActivity(
             context,
@@ -26,23 +26,26 @@ class NotificationService(
             activityIntent,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
         )
+
         // todo code change
-        val useIntent = PendingIntent.getBroadcast(
-            context,
-            2,
-            Intent(context, NotificationReceiver::class.java),
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
-        )
+//        val useIntent = PendingIntent.getBroadcast(
+//            context,
+//            2,
+//            Intent(context, NotificationReceiver::class.java),
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+//        )
+
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_baseline_sports_martial_arts_24)
-            .setContentTitle("Title here")
-            .setContentText("Text here $text")
+            .setSmallIcon(R.drawable.muscle)
+            .setContentTitle("New Personal Best")
+            .setContentText("New Personal Best for $exerciseName is $weight")
             .setContentIntent(activityPendingIntent) // can set LED light and number or chat or unread
-            .addAction(
-                R.drawable.ic_baseline_sports_martial_arts_24,
-                "Some Action here",
-                useIntent
-            )
+//            .addAction(
+//                R.drawable.muscle,
+//                "Share (TODO)",
+//                useIntent
+//            )
             .build()
 
 

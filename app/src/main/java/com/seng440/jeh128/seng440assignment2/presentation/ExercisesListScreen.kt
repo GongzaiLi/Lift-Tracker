@@ -41,7 +41,6 @@ fun ExercisesListScreen(
     viewModel: ExercisesViewModel,
     navigateToViewExerciseScreen: (exerciseId: Int) -> Unit,
     navController: NavController,
-    notificationService: NotificationService
 ) {
     LaunchedEffect(Unit) {
         viewModel.getExercises()
@@ -63,9 +62,9 @@ fun ExercisesListScreen(
         })
     }, floatingActionButton = {
         AddExerciseFloatingActionButton(openDialog = {
-            notificationService.showNotification("Adding exercise now")
             viewModel.openDialog()
-        })
+        }
+        )
     })
 }
 

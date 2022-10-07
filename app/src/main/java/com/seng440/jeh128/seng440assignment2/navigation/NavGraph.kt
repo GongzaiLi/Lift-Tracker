@@ -24,7 +24,6 @@ import com.seng440.jeh128.seng440assignment2.ui.theme.*
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    notificationService: NotificationService,
     sharedPreferences: SharedPreferences,
 ) {
     val viewModel: ExercisesViewModel = hiltViewModel()
@@ -65,7 +64,6 @@ fun NavGraph(
                         navController.navigate("${ViewExerciseScreen.route}/${exerciseId}")
                     },
                     navController = navController,
-                    notificationService = notificationService,
                 )
             }
             composable(
