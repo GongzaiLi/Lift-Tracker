@@ -7,7 +7,9 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -50,17 +52,17 @@ fun LogPBScreen(
     exerciseId: Int,
     navigateBack: () -> Unit,
 ) {
-    var useMyLocation by remember { mutableStateOf(false) }
+    var useMyLocation by rememberSaveable { mutableStateOf(false) }
     val myCurrentLocation = viewModel.currentLocation
 
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.getExercise(exerciseId)
-    }
-    println(useMyLocation)
 
-    LaunchedEffect(useMyLocation) {
+    LaunchedEffect(Unit) {
+        viewModel.getExercise(exerciseId) //TODO need this here?
+    }
+
+    LaunchedEffect(useMyLocation) { //executes on rotate, hard to fix
         if (useMyLocation) {
             if (isLocationEnabled(context)) {
                 viewModel.getCurrentLocation()
@@ -68,7 +70,6 @@ fun LogPBScreen(
                 enableLocation(context)
             }
         }
-
     }
 
     Scaffold(
@@ -129,7 +130,9 @@ fun LogPBContent(
 
     Card(Modifier.fillMaxSize()) {
         Column(
-            Modifier.fillMaxSize(),
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
