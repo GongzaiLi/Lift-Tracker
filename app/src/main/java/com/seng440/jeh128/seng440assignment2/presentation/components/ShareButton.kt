@@ -10,14 +10,6 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun ShareButton(title: String, subject: String, text: String) {
-//    val intent: Intent = Intent().apply {
-//        action = Intent.ACTION_SEND
-//        putExtra(Intent.EXTRA_SUBJECT, subject)
-//        putExtra(Intent.EXTRA_TEXT, text)
-//        type = "text/plain"
-//    }
-//    val shareIntent = Intent.createChooser(intent, title) // title
-
     val shareIntent = createShareIntent(title, subject, text)
     val context = LocalContext.current
 

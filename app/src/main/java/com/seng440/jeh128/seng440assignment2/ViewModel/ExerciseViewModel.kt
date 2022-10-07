@@ -4,10 +4,8 @@ import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.core.NotificationService
 import com.seng440.jeh128.seng440assignment2.data.local.LocationHandler
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
@@ -137,13 +135,12 @@ class ExercisesViewModel @Inject constructor(
         }
     }
 
-    fun showNotification() {
-        val topPersonalBest = exerciseWithPersonalBests.personalBests.sortedBy { it.pbWeight }.reversed().firstOrNull()
+    fun showNotification(personalBest: PersonalBest) {
 
         notificationService.showNotification(
             exerciseWithPersonalBests.exercise.name,
-            topPersonalBest?.pbWeight.toString(),
-            topPersonalBest?.pbLocation.toString()
+            personalBest.pbWeight.toString(),
+           personalBest.pbLocation
         )
     }
 }
