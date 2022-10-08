@@ -38,6 +38,8 @@ fun ViewExerciseScreen(
         viewModel.getExercise(exerciseId)
         viewModel.getExerciseWithPersonalBests(exerciseId)
     }
+    val weightUnit =  viewModel.weighUnit
+
     Scaffold(
         topBar = {
             ViewExerciseTopBar(
@@ -50,6 +52,7 @@ fun ViewExerciseScreen(
                 padding,
                 exercise = viewModel.exercise,
                 exerciseWithPersonalBests = viewModel.exerciseWithPersonalBests,
+                weightUnit = weightUnit,
                 viewModel = viewModel,
                 navigateToVideoPlayerScreen = navigateToVideoPlayerScreen
             )
@@ -113,6 +116,7 @@ fun ViewExerciseContent(
     padding: PaddingValues,
     exercise: Exercise,
     exerciseWithPersonalBests: ExerciseWithPersonalBests,
+    weightUnit: WeightUnit,
     viewModel: ExercisesViewModel,
     navigateToVideoPlayerScreen: (personalBestId: Int) -> Unit,
 ) {
@@ -163,6 +167,7 @@ fun ViewExerciseContent(
                 PersonalBestCard(
                     is_current_PB = index == 0,
                     personalBest = personalBest,
+                    weightUnit = weightUnit,
                     navigateToVideoPlayerScreen = navigateToVideoPlayerScreen
                 )
             }
@@ -177,9 +182,20 @@ fun ViewExerciseContent(
 fun PersonalBestCard(
     personalBest: PersonalBest,
     is_current_PB: Boolean,
+    weightUnit: WeightUnit,
     navigateToVideoPlayerScreen: (personalBestId: Int) -> Unit,
 ) {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy")
+    val weight: String
+    val unit: String
+    if (weightUnit == WeightUnit.KILOGRAMS) {
+        weight = personalBest.pbWeight.toString()
+        unit = stringResource(R.string.kg_unit)
+    } else {
+        weight = personalBest.pbWeight.toPounds().toString() //convert
+        unit = stringResource(R.string.pounds_unit)
+    }
+
 
     Card(
         shape = MaterialTheme.shapes.small,
@@ -219,7 +235,8 @@ fun PersonalBestCard(
                 Text(
                     text = stringResource(
                         id = R.string.pb_weight,
-                        personalBest.pbWeight.toString()
+                        weight,
+                        unit
                     ),
                     style = MaterialTheme.typography.h2,
                 )
@@ -254,3 +271,5 @@ fun PersonalBestCard(
         }
     }
 }
+
+fun Double.toPounds(): Double = this.times(2.2046)

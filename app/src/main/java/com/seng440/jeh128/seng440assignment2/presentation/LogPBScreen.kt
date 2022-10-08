@@ -54,11 +54,11 @@ fun LogPBScreen(
     val myCurrentLocation = viewModel.currentLocation
 
     val context = LocalContext.current
+    val weightUnit =  viewModel.weighUnit
 
     LaunchedEffect(Unit) {
         viewModel.getExercise(exerciseId)
     }
-    println(useMyLocation)
 
     LaunchedEffect(useMyLocation) {
         if (useMyLocation) {
@@ -83,6 +83,7 @@ fun LogPBScreen(
             navigateBack = navigateBack,
             useMyLocation = useMyLocation,
             myCurrentLocation = myCurrentLocation,
+            weightUnit = weightUnit,
             toggleUseMyLocation = {
                 useMyLocation = !useMyLocation
             },
@@ -110,6 +111,7 @@ fun LogPBContent(
     navigateBack: () -> Unit,
     useMyLocation: Boolean,
     myCurrentLocation: String,
+    weightUnit: WeightUnit,
     locationPermissionGranted: () -> Unit,
     addPersonalBest: (personalBest: PersonalBest) -> Unit,
     toggleUseMyLocation: () -> Unit
@@ -220,6 +222,7 @@ fun LogPBContent(
                     if (weightVal == null) {
                         weightVal = 0.0
                     }
+                    if (weightUnit == WeightUnit.POUNDS)  weightVal = weightVal.toKgs()
 
                     navigateBack()
                     val personalBest = PersonalBest(
@@ -306,3 +309,5 @@ fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
         }
     }
 }
+
+fun Double.toKgs(): Double = this.div(2.2046)
