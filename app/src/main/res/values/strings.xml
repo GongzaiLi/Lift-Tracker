@@ -45,12 +45,17 @@
     <string name="exercise_name">Exercise Name</string>
     <string name="exercise_notes">Exercise Notes</string>
     <string name="pb_location">Location: %s</string>
-    <string name="pb_weight">Weight: %s kg</string>
+    <string name="pb_weight">Weight: %s %s</string>
     <string name="pb_date">Date: %s</string>
     <string name="loading">Loading...</string>
     <string name="myPersonalbest">My Personal Best</string>
     <string name="notification_title">New PB Logged</string>
     <string name="notification_description">You logged a new PB of %s for %s. You might want to share it?</string>
     <string name="shareButtonText">Share PB</string>
+    <string name="weight_pounds">Pounds</string>
+    <string name="weight_kg">Kilograms</string>
+    <string name="weight_unit_label">Weight Unit:</string>
+    <string name="kg_unit">kg</string>
+    <string name="pounds_unit">lbs</string>
 
 </resources>

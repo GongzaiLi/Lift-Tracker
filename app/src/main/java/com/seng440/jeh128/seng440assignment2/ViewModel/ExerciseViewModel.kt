@@ -1,5 +1,6 @@
 package com.seng440.jeh128.seng440assignment2.ViewModel
 
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,6 +13,7 @@ import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.ExerciseWithPersonalBests
 import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
 import com.seng440.jeh128.seng440assignment2.domain.repository.ExerciseRepository
+import com.seng440.jeh128.seng440assignment2.presentation.WeightUnit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +25,9 @@ class ExercisesViewModel @Inject constructor(
     private val repo: ExerciseRepository,
     private val locationHandler: LocationHandler,
     private val notificationService: NotificationService,
+    private val preferences: SharedPreferences
     ) : ViewModel() {
+
     var exercises by mutableStateOf(emptyList<Exercise>())
     var exercise by mutableStateOf(Exercise(0, "", ""))
     var exerciseWithPersonalBests by mutableStateOf(
@@ -37,6 +41,12 @@ class ExercisesViewModel @Inject constructor(
     var deletingExercises by mutableStateOf(false)
 
     var currentLocation by mutableStateOf("")
+    var weighUnit by  mutableStateOf(WeightUnit.KILOGRAMS)
+
+
+    init {
+        setWeightUnit()
+    }
 
     fun getExercises() {
         viewModelScope.launch {
@@ -142,5 +152,10 @@ class ExercisesViewModel @Inject constructor(
             personalBest.pbWeight.toString(),
            personalBest.pbLocation
         )
+    }
+
+    fun setWeightUnit() {
+        val weighUnitId = preferences.getInt("weight_unit", 0)
+        weighUnit = WeightUnit.fromInt(weighUnitId)
     }
 }

@@ -54,11 +54,11 @@ fun LogPBScreen(
     val myCurrentLocation = viewModel.currentLocation
 
     val context = LocalContext.current
+    val weightUnit =  viewModel.weighUnit
 
     LaunchedEffect(Unit) {
         viewModel.getExercise(exerciseId)
     }
-    println(useMyLocation)
 
     LaunchedEffect(useMyLocation) {
         if (useMyLocation) {
@@ -83,6 +83,7 @@ fun LogPBScreen(
             navigateBack = navigateBack,
             useMyLocation = useMyLocation,
             myCurrentLocation = myCurrentLocation,
+            weightUnit = weightUnit,
             toggleUseMyLocation = {
                 useMyLocation = !useMyLocation
             },
@@ -110,6 +111,7 @@ fun LogPBContent(
     navigateBack: () -> Unit,
     useMyLocation: Boolean,
     myCurrentLocation: String,
+    weightUnit: WeightUnit,
     locationPermissionGranted: () -> Unit,
     addPersonalBest: (personalBest: PersonalBest) -> Unit,
     toggleUseMyLocation: () -> Unit
@@ -127,6 +129,10 @@ fun LogPBContent(
 
     var showGallerySelect by remember { mutableStateOf(false) }
     var showRecordVideo by remember { mutableStateOf(false) }
+
+    val unit =
+        if (weightUnit == WeightUnit.KILOGRAMS) stringResource(R.string.kg_unit)
+        else stringResource(R.string.pounds_unit)
 
     Card(Modifier.fillMaxSize()) {
         Column(
@@ -175,7 +181,7 @@ fun LogPBContent(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 value = weight.value,
                 onValueChange = { weight.value = it },
-                label = { Text(stringResource(id = R.string.weight)) })
+                label = { Text("${stringResource(id = R.string.weight)} ($unit)") })
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(0.7f),
@@ -220,6 +226,7 @@ fun LogPBContent(
                     if (weightVal == null) {
                         weightVal = 0.0
                     }
+                    if (weightUnit == WeightUnit.POUNDS)  weightVal = weightVal.toKgs()
 
                     navigateBack()
                     val personalBest = PersonalBest(
@@ -306,3 +313,5 @@ fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
         }
     }
 }
+
+fun Double.toKgs(): Double = this.div(2.2046)

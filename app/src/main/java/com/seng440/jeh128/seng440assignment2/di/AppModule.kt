@@ -1,6 +1,7 @@
 package com.seng440.jeh128.seng440assignment2.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.seng440.jeh128.seng440assignment2.core.Constants.Companion.EXERCISE_TABLE
 import com.seng440.jeh128.seng440assignment2.core.NotificationService
@@ -21,7 +22,7 @@ class AppModule {
     @Provides
     fun provideExerciseDb(
         @ApplicationContext
-        context : Context
+        context: Context
     ) = Room.databaseBuilder(
         context,
         ExerciseDb::class.java,
@@ -51,4 +52,10 @@ class AppModule {
         @ApplicationContext
         context: Context
     ): NotificationService = NotificationService(context)
+
+    @Provides
+    fun providePreferences(
+        @ApplicationContext
+        context: Context
+    ): SharedPreferences = context.getSharedPreferences("Preference_data", Context.MODE_PRIVATE)
 }
