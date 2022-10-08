@@ -22,6 +22,9 @@ interface ExerciseDao {
     @Insert
     fun addNewPersonalBest(personalBest: PersonalBest)
 
+    @Delete
+    fun deletePersonalBest(personalBest: PersonalBest)
+
     @Update
     fun updateExercise(exercise: Exercise)
 

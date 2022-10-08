@@ -118,6 +118,12 @@ class ExercisesViewModel @Inject constructor(
         }
     }
 
+    fun deletePersonalBest(personalBest: PersonalBest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deletePersonalBestFromRoom(personalBest)
+        }
+    }
+
     fun updateExercise(exercise: Exercise) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.updateExerciseInRoom(exercise)
