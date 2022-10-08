@@ -23,7 +23,6 @@ class LocationHandler @Inject constructor(private val context: Context) {
     }
     private val geCoder by lazy { Geocoder(context) }
 
-    private val currentLocationStringChannel = Channel<String>()
     private val currentLocationChannel = Channel<Location>()
 
 
@@ -48,8 +47,7 @@ class LocationHandler @Inject constructor(private val context: Context) {
         }
         val formattedAddress = addresses?.get(0)?.getAddressLine(0)
 
-        currentLocationStringChannel.trySend(formattedAddress ?: ":(")
-        return currentLocationStringChannel.receive()
+        return formattedAddress ?: ":("
     }
 
 }
