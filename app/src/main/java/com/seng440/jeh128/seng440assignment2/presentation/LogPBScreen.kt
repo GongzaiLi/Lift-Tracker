@@ -130,6 +130,10 @@ fun LogPBContent(
     var showGallerySelect by remember { mutableStateOf(false) }
     var showRecordVideo by remember { mutableStateOf(false) }
 
+    val unit =
+        if (weightUnit == WeightUnit.KILOGRAMS) stringResource(R.string.kg_unit)
+        else stringResource(R.string.pounds_unit)
+
     Card(Modifier.fillMaxSize()) {
         Column(
             Modifier.fillMaxSize(),
@@ -177,7 +181,7 @@ fun LogPBContent(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 value = weight.value,
                 onValueChange = { weight.value = it },
-                label = { Text(stringResource(id = R.string.weight)) })
+                label = { Text("${stringResource(id = R.string.weight)} ($unit)") })
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(0.7f),
