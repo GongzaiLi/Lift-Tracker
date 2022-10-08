@@ -21,5 +21,7 @@ class ExerciseRepositoryImpl (private val exerciseDao: ExerciseDao) : ExerciseRe
 
     override suspend fun addPersonalBestToRoom(personalBest: PersonalBest) = exerciseDao.addNewPersonalBest(personalBest)
 
+    override suspend fun deletePersonalBestFromRoom(personalBest: PersonalBest) = exerciseDao.deletePersonalBest(personalBest)
+
     override suspend fun getExerciseWithPersonalBests(id: Int) = exerciseDao.getExercisesWithPersonalBests(id)
 }

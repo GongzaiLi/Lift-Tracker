@@ -20,5 +20,7 @@ interface ExerciseRepository {
 
     suspend fun addPersonalBestToRoom(personalBest: PersonalBest)
 
+    suspend fun deletePersonalBestFromRoom(personalBest: PersonalBest)
+
     suspend fun getExerciseWithPersonalBests(id: Int):  Flow<ExerciseWithPersonalBests>
 }

@@ -1,19 +1,26 @@
 package com.seng440.jeh128.seng440assignment2.presentation
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,7 +45,7 @@ fun ViewExerciseScreen(
         viewModel.getExercise(exerciseId)
         viewModel.getExerciseWithPersonalBests(exerciseId)
     }
-    val weightUnit =  viewModel.weighUnit
+    val weightUnit = viewModel.weighUnit
 
     Scaffold(
         topBar = {
@@ -111,6 +118,7 @@ fun ViewExerciseTopBar(
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ViewExerciseContent(
     padding: PaddingValues,
@@ -127,7 +135,7 @@ fun ViewExerciseContent(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        val personalBestList = remember { exerciseWithPersonalBests.personalBests.reversed() }
+        val personalBestList = remember(exerciseWithPersonalBests) { exerciseWithPersonalBests.personalBests.reversed() }
         val topPersonalBest = personalBestList.sortedBy { it.pbWeight }.reversed().firstOrNull()
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Column {
@@ -164,11 +172,55 @@ fun ViewExerciseContent(
                     personalBest.personalBestId
                 }
             ) { index, personalBest ->
-                PersonalBestCard(
-                    is_current_PB = index == 0,
-                    personalBest = personalBest,
-                    weightUnit = weightUnit,
-                    navigateToVideoPlayerScreen = navigateToVideoPlayerScreen
+
+                val dismissState = rememberDismissState(
+                    confirmStateChange = {
+                        if (it == DismissValue.DismissedToStart) {
+                            viewModel.deletePersonalBest(personalBest)
+                        }
+                        true
+                    }
+                )
+
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    background = {
+
+                        val color by animateColorAsState(
+                            targetValue = when (dismissState.targetValue) {
+                                DismissValue.Default -> MaterialTheme.colors.background
+                                else -> Color.Red
+                            }
+                        )
+
+                        val icons = Icons.Default.Delete
+
+                        val scale by animateFloatAsState(
+                            targetValue =
+                            if (dismissState.targetValue == DismissValue.Default) 0.8f else 1.2f
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(color)
+                                .padding(start = 12.dp, end = 12.dp),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Icon(icons, contentDescription = null, modifier = Modifier.scale(scale))
+                        }
+                    },
+                    dismissContent = {
+                        PersonalBestCard(
+                            is_current_PB = index == 0,
+                            personalBest = personalBest,
+                            weightUnit = weightUnit,
+                            navigateToVideoPlayerScreen = navigateToVideoPlayerScreen
+                        )
+
+                    }
                 )
             }
         }
