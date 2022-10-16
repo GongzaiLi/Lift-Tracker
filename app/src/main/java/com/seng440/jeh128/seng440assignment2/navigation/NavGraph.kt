@@ -14,11 +14,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
-import com.seng440.jeh128.seng440assignment2.core.NotificationService
 import com.seng440.jeh128.seng440assignment2.navigation.Screen.*
 import com.seng440.jeh128.seng440assignment2.presentation.*
 import com.seng440.jeh128.seng440assignment2.presentation.components.ThemeType
-import com.seng440.jeh128.seng440assignment2.ui.theme.*
+import com.seng440.jeh128.seng440assignment2.ui.theme.BlueTheme
+import com.seng440.jeh128.seng440assignment2.ui.theme.PinkTheme
+import com.seng440.jeh128.seng440assignment2.ui.theme.PurpleTheme
+import com.seng440.jeh128.seng440assignment2.ui.theme.YellowTheme
 
 
 @Composable
@@ -49,7 +51,11 @@ fun NavGraph(
 
     themeFunction.invoke(darkMode.value) {
         val systemUiController = rememberSystemUiController()
-        systemUiController.setStatusBarColor(MaterialTheme.colors.primaryVariant)
+        if (darkModeValue) {
+            systemUiController.setStatusBarColor(MaterialTheme.colors.surface)
+        } else {
+            systemUiController.setStatusBarColor(MaterialTheme.colors.primaryVariant)
+        }
 
         NavHost(
             navController = navController,

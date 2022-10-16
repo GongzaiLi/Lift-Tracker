@@ -7,24 +7,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val YellowLightColorPalette = lightColors(
-    primary = yellow500,
-    primaryVariant = yellow400,
+    primary = Color(0xffffee58),
+    primaryVariant = Color(0xFF8D8D31),
     onPrimary = Color.Black,
-    secondary = blue700,
-    secondaryVariant = blue800,
-    onSecondary = Color.White,
-    surface = yellowLightPrimary
+    secondary = Color(0xFFD4E157),
+    secondaryVariant = Color(0xffa0af22),
+    onSecondary = Color.Black,
+    surface = Color(0xFFE7E7E7),
+    background = Color(0xFFFFFFFF),
 )
 
 private val YellowDarkColorPalette = darkColors(
-    primary = yellow200,
-    primaryVariant = yellow400,
+    primary = Color(0xfff9a825),
+    primaryVariant = Color(0xffc17900),
     onPrimary = Color.Black,
-    secondary = blue200,
-    secondaryVariant = blue800,
-    onSecondary = Color.White,
-    surface = yellowDarkPrimary
+    secondary = Color(0xffffd600),
+    secondaryVariant = Color(0xffc7a500),
+    onSecondary = Color.Black,
+    surface = Color(0xFF555555),
+    background = Color(0xFF1A1A1A),
 )
+
 
 @Composable
 fun YellowTheme(

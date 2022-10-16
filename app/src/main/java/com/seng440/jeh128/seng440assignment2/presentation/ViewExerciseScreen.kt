@@ -255,7 +255,7 @@ fun PersonalBestCard(
         unit = stringResource(R.string.pounds_unit)
     }
 
-    val modifier = if (is_current_PB) Modifier.background(MaterialTheme.colors.secondaryVariant)
+    val modifier = if (is_current_PB) Modifier.background(MaterialTheme.colors.secondary)
         else Modifier
 
 

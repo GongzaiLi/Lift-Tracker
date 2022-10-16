@@ -28,10 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.seng440.jeh128.seng440assignment2.R
 import com.seng440.jeh128.seng440assignment2.ViewModel.ExercisesViewModel
-import com.seng440.jeh128.seng440assignment2.core.NotificationService
 import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.navigation.Screen
-import com.seng440.jeh128.seng440assignment2.presentation.components.ShareButton
 import com.seng440.jeh128.seng440assignment2.presentation.components.getIconFromDrawable
 import java.time.format.DateTimeFormatter
 
@@ -144,7 +142,8 @@ fun AddExerciseAlertDialog(
                     }
                 ) {
                     Text(
-                        text = stringResource(id = R.string.add)
+                        text = stringResource(id = R.string.add),
+                        color = MaterialTheme.colors.onPrimary
                     )
                 }
             },
@@ -153,7 +152,8 @@ fun AddExerciseAlertDialog(
                     onClick = closeDialog
                 ) {
                     Text(
-                        text = stringResource(id = R.string.dismiss)
+                        text = stringResource(id = R.string.dismiss),
+                        color = MaterialTheme.colors.onPrimary
                     )
                 }
             })

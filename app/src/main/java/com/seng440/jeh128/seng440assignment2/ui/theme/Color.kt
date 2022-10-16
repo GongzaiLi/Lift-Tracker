@@ -44,3 +44,9 @@ val pink500 = Color(0xffff0266)
 val pink600 = Color(0xffd8004d)
 val pinkDarkPrimary = Color(0xff24191c)
 val pinkLightPrimary = Color(0xffecedd4)
+
+
+val blueType = Color(0xff64b5f6)
+val pinkType = Color(0xfff06292);
+val purpleType = Color(0xffce93d8);
+val yellowType = Color(0xffffee58);

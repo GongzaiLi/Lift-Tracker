@@ -158,7 +158,7 @@ fun LogPBContent(
                         }
                     )
                 } else {
-                    OutlinedButton(
+                    Button(
                         onClick = {
                             showGallerySelect = true
                             showRecordVideo = false
@@ -166,7 +166,7 @@ fun LogPBContent(
                     ) {
                         Text(stringResource(id = R.string.select_video))
                     }
-                    OutlinedButton(
+                    Button(
                         onClick = {
                             showGallerySelect = false
                             showRecordVideo = true
@@ -219,7 +219,7 @@ fun LogPBContent(
                 }
             )
 
-            TextButton(
+            Button(
                 onClick = {
 
                     var weightVal = weight.value.toDoubleOrNull()
