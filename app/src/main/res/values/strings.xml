@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Personal Best Tracker</string>
+    <string name="app_name">Lift Tracker</string>
 
     <!-- Permission rationale -->
     <string name="permission_request">Permission Request</string>
@@ -10,8 +10,8 @@
     <string name="open_setting">Open Setting</string>
 
     <!--    Screen Titles-->
-    <string name="log_pb">Log Personal Best</string>
-    <string name="record_pb">Record Personal Best</string>
+    <string name="log_pb">Log Lift</string>
+    <string name="record_pb">Record Lift</string>
 
 
     <!--    Log Pb Screen-->
@@ -20,10 +20,10 @@
     <string name="record_video">Record Video</string>
 
     <!-- Video Player Screen -->
-    <string name="play_video">Personal Best Video</string>
+    <string name="play_video">Lift Video</string>
 
 <!--    View Exercise Screen-->
-    <string name="personal_best_share_text">Sharing my latest personal best with you. \n
+    <string name="personal_best_share_text">Sharing my latest lift with you. \n
                         Exercise: %s  \n
                         Weight: %s \n
                         Location: %s</string>
@@ -48,10 +48,10 @@
     <string name="pb_weight">Weight: %s %s</string>
     <string name="pb_date">Date: %s</string>
     <string name="loading">Loading...</string>
-    <string name="myPersonalbest">My Personal Best</string>
-    <string name="notification_title">New PB Logged</string>
-    <string name="notification_description">You logged a new PB of %s for %s. You might want to share it?</string>
-    <string name="shareButtonText">Share PB</string>
+    <string name="myPersonalbest">My Lift</string>
+    <string name="notification_title">New Lift Logged</string>
+    <string name="notification_description">You logged a new Lift of %s for %s. You might want to share it?</string>
+    <string name="shareButtonText">Share Lift</string>
     <string name="weight_pounds">Pounds</string>
     <string name="weight_kg">Kilograms</string>
     <string name="weight_unit_label">Weight Unit:</string>
