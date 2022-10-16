@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -130,14 +132,19 @@ fun ViewExerciseContent(
 ) {
     Column(
         modifier = Modifier
-            .padding(30.dp, 10.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(12.dp, 10.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        val personalBestList = remember(exerciseWithPersonalBests) { exerciseWithPersonalBests.personalBests.reversed() }
+        val personalBestList =
+            remember(exerciseWithPersonalBests) { exerciseWithPersonalBests.personalBests.reversed() }
         val topPersonalBest = personalBestList.sortedBy { it.pbWeight }.reversed().firstOrNull()
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Column {
 
                 Text(
@@ -150,6 +157,7 @@ fun ViewExerciseContent(
                     textAlign = TextAlign.Left,
                     style = MaterialTheme.typography.h3,
                 )
+                Divider(Modifier.padding(4.dp))
             }
 
             ShareButton(
@@ -248,6 +256,11 @@ fun PersonalBestCard(
         unit = stringResource(R.string.pounds_unit)
     }
 
+    val modifier = if (is_current_PB)
+        Modifier.background(Color.Yellow)
+        else Modifier
+
+
 
     Card(
         shape = MaterialTheme.shapes.small,
@@ -261,21 +274,9 @@ fun PersonalBestCard(
             .fillMaxWidth()
     ) {
         Row(
-            modifier = if (is_current_PB) {
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        all = 12.dp
-                    )
-                    .background(Color.Yellow)
-            } else {
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        all = 12.dp
-                    )
-                    .background(Color.White)
-            },
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(

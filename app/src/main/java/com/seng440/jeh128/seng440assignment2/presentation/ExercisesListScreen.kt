@@ -109,7 +109,7 @@ fun AddExerciseAlertDialog(
             },
             text = {
                 Column {
-                    TextField(
+                    OutlinedTextField(
                         value = name,
                         onValueChange = { name = it },
                         placeholder = {
@@ -117,9 +117,11 @@ fun AddExerciseAlertDialog(
                                 text = stringResource(id = R.string.exercise_name)
                             )
                         },
-                        modifier = Modifier.focusRequester(focusRequester)
+                        modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .padding(4.dp),
                     )
-                    TextField(
+                    OutlinedTextField(
                         value = notes,
                         onValueChange = { notes = it },
                         placeholder = {
@@ -127,7 +129,9 @@ fun AddExerciseAlertDialog(
                                 text = stringResource(id = R.string.exercise_notes)
                             )
                         },
-                        modifier = Modifier.focusRequester(focusRequester)
+                        modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .padding(4.dp),
                     )
                 }
             },
