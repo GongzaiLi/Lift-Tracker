@@ -11,9 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -21,9 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,6 +31,7 @@ import com.seng440.jeh128.seng440assignment2.domain.model.Exercise
 import com.seng440.jeh128.seng440assignment2.domain.model.ExerciseWithPersonalBests
 import com.seng440.jeh128.seng440assignment2.domain.model.PersonalBest
 import com.seng440.jeh128.seng440assignment2.presentation.components.ShareButton
+import com.seng440.jeh128.seng440assignment2.presentation.components.getIconFromDrawable
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -256,8 +255,7 @@ fun PersonalBestCard(
         unit = stringResource(R.string.pounds_unit)
     }
 
-    val modifier = if (is_current_PB)
-        Modifier.background(Color.Yellow)
+    val modifier = if (is_current_PB) Modifier.background(MaterialTheme.colors.secondaryVariant)
         else Modifier
 
 
@@ -311,15 +309,20 @@ fun PersonalBestCard(
                     style = MaterialTheme.typography.h3,
                 )
             }
-            IconButton(
-                onClick = {
-                    navigateToVideoPlayerScreen(personalBest.personalBestId)
+            if (personalBest.videoUri != android.net.Uri.EMPTY) {
+                IconButton(
+                    onClick = {
+                        navigateToVideoPlayerScreen(personalBest.personalBestId)
+                    }
+
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(60.dp),
+                        painter = painterResource(id = getIconFromDrawable("ic_baseline_play_circle_outline_24")),
+                        contentDescription = null,
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.PlayArrow,
-                    contentDescription = null,
-                )
             }
         }
     }
