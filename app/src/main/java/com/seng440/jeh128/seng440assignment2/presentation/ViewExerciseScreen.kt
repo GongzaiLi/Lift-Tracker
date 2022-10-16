@@ -137,8 +137,8 @@ fun ViewExerciseContent(
         verticalArrangement = Arrangement.Top
     ) {
         val personalBestList =
-            remember(exerciseWithPersonalBests) { exerciseWithPersonalBests.personalBests.reversed() }
-        val topPersonalBest = personalBestList.sortedBy { it.pbWeight }.reversed().firstOrNull()
+            remember(exerciseWithPersonalBests) { exerciseWithPersonalBests.personalBests.sortedBy { it.pbWeight }.reversed() }
+        val topPersonalBest = personalBestList.firstOrNull()
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
