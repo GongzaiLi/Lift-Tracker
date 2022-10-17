@@ -11,12 +11,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -50,7 +52,7 @@ fun LogPBScreen(
     exerciseId: Int,
     navigateBack: () -> Unit,
 ) {
-    var useMyLocation by remember { mutableStateOf(false) }
+    var useMyLocation by rememberSaveable { mutableStateOf(false) }
     val myCurrentLocation = viewModel.currentLocation
 
     val context = LocalContext.current
@@ -159,20 +161,34 @@ fun LogPBContent(
                     )
                 } else {
                     Button(
+                        modifier = Modifier.padding(2.dp),
                         onClick = {
                             showGallerySelect = true
                             showRecordVideo = false
                         }
                     ) {
-                        Text(stringResource(id = R.string.select_video))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_baseline_attach_file_24),
+                                contentDescription = null
+                            )
+                            Text(stringResource(id = R.string.select_video))
+                        }
                     }
                     Button(
+                        modifier = Modifier.padding(2.dp),
                         onClick = {
                             showGallerySelect = false
                             showRecordVideo = true
                         }
                     ) {
-                        Text(stringResource(id = R.string.record_video))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_record),
+                                contentDescription = null
+                            )
+                            Text(stringResource(id = R.string.record_video))
+                        }
                     }
                 }
             }
@@ -220,6 +236,7 @@ fun LogPBContent(
             )
 
             Button(
+                modifier = Modifier.padding(2.dp),
                 onClick = {
 
                     var weightVal = weight.value.toDoubleOrNull()
@@ -281,7 +298,7 @@ fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
         Text("Note: Using current location.")
         locationPermissionGranted()
     } else {
-        Column {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             val allPermissionsRevoked =
                 locationPermissionsState.permissions.size ==
                         locationPermissionsState.revokedPermissions.size
@@ -307,7 +324,9 @@ fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
 
             Text(text = textToShow)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { locationPermissionsState.launchMultiplePermissionRequest() }) {
+            Button(
+                modifier = Modifier.padding(2.dp),
+                onClick = { locationPermissionsState.launchMultiplePermissionRequest() }) {
                 Text(buttonText)
             }
         }
