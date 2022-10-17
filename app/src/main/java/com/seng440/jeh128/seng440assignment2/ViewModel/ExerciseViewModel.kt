@@ -146,7 +146,9 @@ class ExercisesViewModel @Inject constructor(
 
     fun getCurrentLocation() {
         viewModelScope.launch {
-            currentLocation = "Loading..."
+            if (currentLocation.isBlank()) {
+                currentLocation = "Loading..."
+            }
             currentLocation = locationHandler.getCurrentLocationString()
         }
     }

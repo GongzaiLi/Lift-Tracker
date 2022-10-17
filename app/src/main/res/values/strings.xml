@@ -57,5 +57,11 @@
     <string name="weight_unit_label">Weight Unit:</string>
     <string name="kg_unit">kg</string>
     <string name="pounds_unit">lbs</string>
+    <string name="using_current_location">Note: Using current location.</string>
+    <string name="using_approximate_location">Using approximate location.</string>
+    <string name="location_permissions_denied">Location permission is required to fill your current location. \n Please grant the fine location.</string>
+    <string name="request_permission_note">This feature requires location permission.</string>
+    <string name="request_precise_location_button_text">Allow precise location.</string>
+    <string name="request_permissions_button_text">Request permissions</string>
 
 </resources>

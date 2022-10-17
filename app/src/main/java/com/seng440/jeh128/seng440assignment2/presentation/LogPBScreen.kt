@@ -53,6 +53,8 @@ fun LogPBScreen(
     navigateBack: () -> Unit,
 ) {
     var useMyLocation by rememberSaveable { mutableStateOf(false) }
+    var locationPermissionGranted by rememberSaveable { mutableStateOf(false) }
+
     val myCurrentLocation = viewModel.currentLocation
 
     val context = LocalContext.current
@@ -62,8 +64,8 @@ fun LogPBScreen(
         viewModel.getExercise(exerciseId)
     }
 
-    LaunchedEffect(useMyLocation) {
-        if (useMyLocation) {
+    LaunchedEffect(useMyLocation, locationPermissionGranted) {
+        if (useMyLocation and locationPermissionGranted) {
             if (isLocationEnabled(context)) {
                 viewModel.getCurrentLocation()
             } else {
@@ -90,8 +92,7 @@ fun LogPBScreen(
                 useMyLocation = !useMyLocation
             },
             locationPermissionGranted = {
-//                viewModel.getCurrentLocation()
-                //do something?
+                locationPermissionGranted = it
             },
             addPersonalBest = { personalBest ->
                 viewModel.addPersonalBest(personalBest)
@@ -114,7 +115,7 @@ fun LogPBContent(
     useMyLocation: Boolean,
     myCurrentLocation: String,
     weightUnit: WeightUnit,
-    locationPermissionGranted: () -> Unit,
+    locationPermissionGranted: (Boolean) -> Unit,
     addPersonalBest: (personalBest: PersonalBest) -> Unit,
     toggleUseMyLocation: () -> Unit
 ) {
@@ -215,7 +216,7 @@ fun LogPBContent(
 
             if (useMyLocation) {
                 RequestLocationPermissions {
-                    locationPermissionGranted()
+                    locationPermissionGranted(it)
                 }
             }
 
@@ -286,7 +287,7 @@ fun LogPBTopBar(
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
+fun RequestLocationPermissions(locationPermissionGranted: (Boolean) -> Unit) {
     val locationPermissionsState = rememberMultiplePermissionsState(
         listOf(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -295,8 +296,8 @@ fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
     )
 
     if (locationPermissionsState.allPermissionsGranted) {
-        Text("Note: Using current location.")
-        locationPermissionGranted()
+        Text(stringResource(R.string.using_current_location))
+        locationPermissionGranted(true)
     } else {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             val allPermissionsRevoked =
@@ -306,20 +307,20 @@ fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
             val textToShow = if (!allPermissionsRevoked) {
                 // If not all the permissions are revoked, it's because the user accepted the COARSE
                 // location permission, but not the FINE one.
-                "Using approximate location."
+                stringResource(R.string.using_approximate_location)
             } else if (locationPermissionsState.shouldShowRationale) {
                 // Both location permissions have been denied
-                "Location permission is required to fill your current location. " +
-                        "Please grant the fine location."
+                stringResource(R.string.location_permissions_denied)
+
             } else {
                 // First time the user sees this feature or the user doesn't want to be asked again
-                "This feature requires location permission."
+                stringResource(R.string.request_permission_note)
             }
 
             val buttonText = if (!allPermissionsRevoked) {
-                "Allow precise location"
+                stringResource(R.string.request_precise_location_button_text)
             } else {
-                "Request permissions"
+                stringResource(R.string.request_permissions_button_text)
             }
 
             Text(text = textToShow)
@@ -330,6 +331,7 @@ fun RequestLocationPermissions(locationPermissionGranted: () -> Unit) {
                 Text(buttonText)
             }
         }
+        locationPermissionGranted(false)
     }
 }
 

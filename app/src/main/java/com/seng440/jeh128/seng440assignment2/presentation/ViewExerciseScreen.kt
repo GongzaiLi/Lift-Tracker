@@ -248,10 +248,10 @@ fun PersonalBestCard(
     val weight: String
     val unit: String
     if (weightUnit == WeightUnit.KILOGRAMS) {
-        weight = personalBest.pbWeight.toString()
+        weight = String.format("%.2f", personalBest.pbWeight).toDouble().toString()
         unit = stringResource(R.string.kg_unit)
     } else {
-        weight = personalBest.pbWeight.toPounds().toString() //convert
+        weight = String.format("%.2f", personalBest.pbWeight.toPounds()).toDouble().toString() //convert to pounds
         unit = stringResource(R.string.pounds_unit)
     }
 
