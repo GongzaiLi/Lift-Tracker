@@ -23,7 +23,8 @@ import java.util.*
 
 @Composable
 fun DateTimePicker (
-    onDateSelected: (LocalDateTime) -> Unit
+    onDateSelected: (LocalDateTime) -> Unit,
+    currentDate: LocalDateTime
 ) {
     val context = LocalContext.current
 
@@ -34,16 +35,12 @@ fun DateTimePicker (
     val hour: Int
     val minute: Int
 
-    val calendar = Calendar.getInstance()
+    year = currentDate.year
+    month = currentDate.monthValue - 1
+    day = currentDate.dayOfMonth
 
-    year = calendar.get(Calendar.YEAR)
-    month = calendar.get(Calendar.MONTH)
-    day = calendar.get(Calendar.DAY_OF_MONTH)
-
-    hour = calendar.get(Calendar.HOUR_OF_DAY)
-    minute = calendar.get(Calendar.MINUTE)
-
-    calendar.time = Date()
+    hour = currentDate.hour
+    minute = currentDate.minute
 
     val datePickerDialog = DatePickerDialog(
         context,

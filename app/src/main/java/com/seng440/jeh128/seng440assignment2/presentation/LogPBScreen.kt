@@ -233,7 +233,8 @@ fun LogPBContent(
             DateTimePicker(
                 onDateSelected = { localDateTime ->
                     date.value = localDateTime
-                }
+                },
+                currentDate = date.value,
             )
 
             Button(
